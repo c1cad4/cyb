@@ -34,3 +34,5 @@
 .shot figcaption{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#fff;opacity:.75;margin-top:6px;text-align:center}
 .slide.ink .shot figcaption{color:#000}
 .code{white-space:pre;overflow-x:auto}
+.snd.music{margin-left:auto;border-color:var(--c4);color:var(--c4)}.snd.music.off{opacity:.6;border-color:currentColor;color:inherit}.hud .legend{margin-left:0}
+@media (max-width:900px){.snd.music{display:inline-block;margin-left:auto;font-size:10px;padding:3px 8px}}
