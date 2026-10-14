@@ -164,6 +164,14 @@ document.addEventListener('touchend', (e) => { if (tx == null) return; const dx 
 $('#restart')?.addEventListener('click', (e) => { e.preventDefault(); go(0); });
 document.addEventListener('pointerdown', (e) => { sfx.wake(); if (e.target.closest('button, a, .seg')) sfx.tick(); }, { passive: true });
 document.addEventListener('keydown', () => sfx.wake(), { once: true });
+/* music: WE ARE THE CODE · jooyyrocket — loops, starts on the first gesture if it was on last time */
+const music = (() => { const a = new Audio('music/we-are-the-code.mp3'); a.loop = true; a.preload = 'metadata'; a.volume = .55; let on = localStorage.getItem('cyb.music') === 'on', armed = false; const btn = $('#music');
+  const paint = () => { btn.textContent = (on && !a.paused ? '❚❚' : '▶') + ' we are the code'; btn.classList.toggle('off', !on); btn.title = 'WE ARE THE CODE · jooyyrocket · ' + (on ? 'playing' : 'play'); };
+  const play = () => a.play().then(paint).catch(() => { on = false; paint(); });
+  btn.onclick = (e) => { e.stopPropagation(); on = !on; localStorage.setItem('cyb.music', on ? 'on' : 'off'); if (on) play(); else { a.pause(); paint(); } };
+  document.addEventListener('pointerdown', () => { if (on && a.paused && !armed) { armed = true; play(); } }, { passive: true });
+  document.addEventListener('keydown', () => { if (on && a.paused && !armed) { armed = true; play(); } });
+  a.addEventListener('play', paint); a.addEventListener('pause', paint); paint(); return { get on() { return on; } }; })();
 const sndBtn = $('#snd'); const sndPaint = () => { sndBtn.textContent = sfx.on ? '◉ sound' : '○ sound'; sndBtn.classList.toggle('off', !sfx.on); }; sndBtn.onclick = () => { sfx.toggle(); sndPaint(); }; sndPaint();
 if (matchMedia('(pointer:fine)').matches) { const dot = el('<div class="cur-dot"></div>'), ring = el('<div class="cur-ring"></div>'); document.body.append(dot, ring); let rx = 0, ry = 0, px = 0, py = 0; addEventListener('mousemove', (e) => { px = e.clientX; py = e.clientY; dot.style.transform = `translate(${px}px,${py}px)`; ring.classList.toggle('hot', !!e.target.closest('button, a, .seg, .shot')); }, { passive: true }); const lag = () => { rx += (px - rx) * .18; ry += (py - ry) * .18; ring.style.transform = `translate(${rx}px,${ry}px)`; requestAnimationFrame(lag); }; lag(); document.body.classList.add('has-cursor'); }
 
