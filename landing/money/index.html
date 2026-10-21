@@ -682,23 +682,18 @@
     .cmp-g kbd {
       font-family: 'JetBrains Mono', monospace;
       font-size: .6rem;
-      letter-spacing: .16em;
+      letter-spacing: .18em;
       color: var(--gc);
       display: flex; align-items: center; gap: .45rem;
     }
     .cmp-g kbd::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gc); }
-    .cmp-g .by { font-size: .86rem; line-height: 1.25; color: var(--mute); letter-spacing: -.01em; min-height: 2.5em; }
-    .cmp-g .ins { display: flex; flex-wrap: wrap; gap: .4rem; margin: .1rem 0; }
-    .cmp-i {
-      display: grid; grid-template-columns: 1.7rem auto; column-gap: .4rem; align-items: center;
-      font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .06em; color: #d8d8d8;
-    }
-    .cmp-i svg { width: 1.7rem; height: 1.7rem; display: block; }
-    .cmp-i small { display: block; color: var(--mute); font-size: .56rem; letter-spacing: .04em; }
-    .cmp-g .sum { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -.04em; font-size: clamp(1.5rem, 2.3vw, 2.1rem); line-height: 1; color: #fff; }
-    .cmp-g .sum small { display: block; font-weight: 500; font-size: .58rem; letter-spacing: .14em; color: var(--mute); margin-top: .3rem; }
+    .cmp-g .ins { display: flex; gap: .45rem; margin: .35rem 0 .2rem; }
+    .cmp-i { display: block; width: 2.2rem; height: 2.2rem; }
+    .cmp-i svg { width: 100%; height: 100%; display: block; }
+    .cmp-g .sum { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -.05em; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1; color: #fff; margin-top: .2rem; }
+    .cmp-g .sum i { font-style: normal; font-size: .5em; color: var(--mute); margin-left: .15em; letter-spacing: 0; }
     .cmp-g.on .sum { color: var(--gc); }
-    .cmp-note { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .08em; color: var(--mute); text-align: center; width: 100%; }
+    .cmp-note { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .1em; color: var(--mute); text-align: center; width: 100%; }
     @media (max-width: 640px) {
       .cmp-strip { gap: .45rem; padding-bottom: .4rem; }
       .cmp-g { flex-basis: 78vw; }
@@ -1445,21 +1440,22 @@
           { slug: 'information', label: 'INFORMATION', tone: '#00ff01', by: 'minted when the network learns',
             items: [{ k: 'cyb', n: 'CYB', note: 'genesis 187,416 CYB', usd: null }], unit: 'not launched' }
         ];
+        // one approximate order per group: prices move, the magnitude does not
+        // one scale for every card ($T), rounded to the order; below a trillion show one decimal of a trillion
         const money = (v) => {
-          if (v === null) return '—';
+          if (v === null) return '<i>soon</i>';
           const t = v / 1e12;
-          if (t >= 1) return '$' + (t >= 10 ? t.toFixed(0) : t.toFixed(1)) + 'T';
-          const b = v / 1e9;
-          return '$' + (b >= 10 ? b.toFixed(0) : b.toFixed(1)) + 'B';
+          const r = t >= 10 ? Math.round(t / 10) * 10 : t >= 1 ? Math.round(t) : Math.round(t * 10) / 10;
+          return '~' + r + '<i>$T</i>';
         };
         const live = {};
         function render() {
           root.innerHTML = '<div class="cmp-strip">' + G.map((g, gi) => {
             const total = g.items.every((it) => it.usd === null) ? null : g.items.reduce((a, it) => a + (it.usd || 0), 0);
-            return '<button type="button" class="cmp-g" data-s="' + gi + '" style="--gc:' + g.tone + '"><kbd>' + g.label + '</kbd><span class="by">' + g.by + '</span><span class="ins">' +
-              g.items.map((it) => '<span class="cmp-i" title="' + (it.note || it.n) + '">' + icon(it.k) + '<span>' + it.n + '<small>' + (it.usd === null ? 'not yet' : money(it.usd) + (live[it.id] ? ' · live' : '')) + '</small></span></span>').join('') +
-              '</span><span class="sum">' + money(total) + '<small>' + g.unit + '</small></span></button>';
-          }).join('') + '</div><div class="cmp-note">USD · metals: above-ground stock × spot · fiat: M2 · coins: market cap · ' + AS_OF + (Object.keys(live).length ? ' · coins live via coingecko' : '') + '</div>';
+            return '<button type="button" class="cmp-g" data-s="' + gi + '" style="--gc:' + g.tone + '" title="' + g.by + '"><kbd>' + g.label + '</kbd><span class="ins">' +
+              g.items.map((it) => '<span class="cmp-i" title="' + it.n + '">' + icon(it.k) + '</span>').join('') +
+              '</span><span class="sum">' + money(total) + '</span></button>';
+          }).join('') + '</div><div class="cmp-note">approximate order of value · metals by stock, fiat by M2, coins by market cap</div>';
           root.querySelectorAll('.cmp-g').forEach((el) => {
             const i = +el.getAttribute('data-s');
             el.addEventListener('mouseenter', () => { if (document.querySelector('.chapter.active') === el.closest('.chapter')) showSub(i, false); });
