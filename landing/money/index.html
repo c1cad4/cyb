@@ -1017,8 +1017,8 @@
                   <a class="os" data-os="ios" href="https://github.com/cyberia-to/cyb/releases/download/v0.16.0/cyb-0.16.0.ipa" title="iOS" aria-label="iOS"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="2.2" fill="currentColor"/><circle cx="12" cy="19.3" r=".9" fill="#000"/></svg></a>
                 </div>
                 <div class="rows pack">
-                  <a class="row" href="https://bostrom.network" target="_blank" rel="noopener" data-get="bostrom"><i class="g"></i><kbd>BOSTROM.NETWORK</kbd><b>Reborn 11-05 · 13:22</b></a>
-                  <a class="row" href="https://spacepussy.ai" target="_blank" rel="noopener" data-get="pussy"><i class="p"></i><kbd>SPACEPUSSY.AI</kbd><b>Reborn 11-05 · 13:37</b></a>
+                  <a class="row" href="https://bostrom.network" target="_blank" rel="noopener" data-get="bostrom"><i class="g"></i><kbd>BOSTROM.NETWORK</kbd><b>Reborn in <span data-days>—</span></b></a>
+                  <a class="row" href="https://spacepussy.ai" target="_blank" rel="noopener" data-get="pussy"><i class="p"></i><kbd>SPACEPUSSY.AI</kbd><b>Reborn 15 min later</b></a>
                   <a class="row" href="https://cyb.ai" target="_blank" rel="noopener" data-get="robot"><i class="r"></i><kbd>CYB.AI</kbd><b>The robot</b></a>
                   <a class="row" href="https://cyber.page" target="_blank" rel="noopener" data-get="protocol"><i class="b"></i><kbd>CYBER.PAGE</kbd><b>The protocol</b></a>
                   <a class="row" href="https://soft3.org" target="_blank" rel="noopener" data-get="stack"><i class="y"></i><kbd>SOFT3.ORG</kbd><b>The stack</b></a>
@@ -1028,7 +1028,7 @@
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p data-cap>CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 on 2026-11-05. CYB follows once proving and encryption are stable — claims first, transfers later.</p>
+            <p data-cap>CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 in <span data-days>—</span>. CYB follows once proving and encryption are stable — claims first, transfers later.</p>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -1110,7 +1110,10 @@
           { slug: 'population', caption: 'Cheaper chips, plus a residual on every robot you ship. Then fairness starts again, larger.' }
         ]
       };
-      const LAUNCH_CAP = 'CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 on 2026-11-05. CYB follows once proving and encryption are stable — claims first, transfers later.';
+      const REBIRTH = Date.parse('2026-11-05T13:22:42Z'); // bostrom block 1 + five years to the second
+      const daysLeft = () => { const d = (REBIRTH - Date.now()) / 864e5; if (d <= 0) return 'now — the chains are live'; const n = Math.ceil(d); return n === 1 ? 'one day' : n + ' days'; };
+      const LAUNCH_CAP = () => 'CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 in ' + daysLeft() + '. CYB follows once proving and encryption are stable — claims first, transfers later.';
+      document.querySelectorAll('[data-days]').forEach((e) => { e.textContent = daysLeft(); });
       const painters = {};
       let step = -1;
       let sub = 0;
@@ -1184,7 +1187,7 @@
           app.dataset.currentSub = '0';
           if (id === 'launch' && ch) {
             const cap = ch.querySelector('[data-cap]');
-            if (cap) cap.textContent = LAUNCH_CAP;
+            if (cap) cap.textContent = LAUNCH_CAP();
           }
           if (push !== false) syncUrl(push);
           return;
@@ -1439,7 +1442,7 @@
           protocol: 'The protocol: how the graph learns, how a neuron earns, how proofs settle. Read it on cyber.page.',
           stack: 'soft3 — collective, private, provable computing. The stack both chains are reborn on.'
         };
-        const def = LAUNCH_CAP;
+        const def = LAUNCH_CAP();
         const ua = navigator.userAgent || '';
         const plat = navigator.platform || '';
         let os = 'mac';
@@ -1491,7 +1494,7 @@
         };
         const G = [
           { slug: 'force', label: 'FORCE', tone: '#00b4ff', by: 'issued as debt, backed by the land a state holds and the army that holds it',
-            items: [{ k: 'usd', n: 'USD', note: 'M2', usd: 22.3e12 }, { k: 'cny', n: 'CNY', note: 'M2', usd: 46.5e12 }, { k: 'eur', n: 'EUR', note: 'M2', usd: 19.5e12 }], unit: 'broad money · 2026 estimate' },
+            items: [{ k: 'usd', n: 'USD', note: 'M2', usd: 22.3e12 }, { k: 'cny', n: 'CNY', note: 'M2', usd: 46.5e12 }, { k: 'eur', n: 'EUR', note: 'M2', usd: 19.5e12 }], unit: 'broad money' },
           { slug: 'production', label: 'PRODUCTION', tone: '#ffc501', by: 'made by work on matter — dug, refined, stored',
             items: [{ k: 'gold', n: 'GOLD', note: '216,265 t × spot', usd: 216265 * OZ_PER_T * 4139.5 }, { k: 'silver', n: 'SILVER', note: '1.74M t × spot', usd: 1740000 * OZ_PER_T * 57.95 }], unit: 'above-ground stock' },
           { slug: 'energy', label: 'ENERGY', tone: '#fe0000', by: 'minted by burning electricity into hashes',
