@@ -448,15 +448,23 @@
     .gkick { font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); text-align: center; }
     .lpane[hidden] { display: none; }
     .lpane { width: 100%; display: flex; justify-content: center; }
-    .gtabs { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; }
-    .gtab { font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .08em; padding: .4rem .8rem; border-radius: 999px; box-shadow: inset 0 0 0 1px #2a2a2a; color: var(--mute); }
-    .gtab.on { color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-    .gcheck input, .gcheck textarea { width: 100%; background: #070707; color: #fff; border: 1px solid #262626; border-radius: 10px; padding: .75rem .85rem; font-family: 'JetBrains Mono', monospace; font-size: .85rem; outline: none; }
-    .gcheck input:focus, .gcheck textarea:focus { border-color: var(--accent); }
-    .gcheck textarea { min-height: 4.2rem; resize: vertical; }
-    .grow { display: flex; gap: .5rem; justify-content: center; }
-    .gcheck .cta { background: var(--accent); color: #000; }
-    .gcheck .cta.ghost { background: transparent; color: #fff; }
+    /* genesis checker — prysm sabers: a button is a transparent region framed by vertical glowing lines,
+       an input is a field over a glowing underline. the field area has a fixed height so tabs never move the panel. */
+    .gtabs { display: flex; gap: .55rem; flex-wrap: wrap; justify-content: center; }
+    .saber, .gcheck .sb { --sc: rgba(255,255,255,.55); --sg: rgba(255,255,255,.14); position: relative; display: inline-flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: .55rem 1.25rem; background: linear-gradient(90deg, var(--sg), transparent 28%, transparent 72%, var(--sg)); color: #9a9a9a; font-family: 'JetBrains Mono', monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: color .15s ease, background .15s ease, --sg .15s ease; }
+    .saber::before, .saber::after, .gcheck .sb::before, .gcheck .sb::after { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--sc); box-shadow: 0 0 8px var(--sc); }
+    .saber::before, .gcheck .sb::before { left: 0; } .saber::after, .gcheck .sb::after { right: 0; }
+    .gtab:hover { color: #d7d7d7; }
+    .gtab.on, .gcheck .sb.go { --sc: var(--green); --sg: color-mix(in srgb, var(--green) 30%, transparent); color: var(--green); text-shadow: 0 0 12px color-mix(in srgb, var(--green) 60%, transparent); }
+    .gcheck .sb.go { font-weight: 700; } .gcheck .sb.clr { --sc: rgba(255,255,255,.45); --sg: rgba(255,255,255,.1); color: #ddd; }
+    .gcheck .sb:active { transform: scale(.96); }
+    .gfield { min-height: 5.2rem; display: grid; align-items: center; }
+    .gfield > [data-in] { width: 100%; }
+    .gfield input, .gfield textarea { width: 100%; display: block; background: transparent; color: #fff; border: 0; border-bottom: 1px solid rgba(255,255,255,.55); border-radius: 0; padding: .7rem .4rem .55rem; font-family: 'JetBrains Mono', monospace; font-size: .9rem; outline: none; text-align: center; box-shadow: 0 10px 18px -12px rgba(255,255,255,.45); transition: border-color .15s ease, box-shadow .15s ease; }
+    .gfield input::placeholder, .gfield textarea::placeholder { color: #555; }
+    .gfield input:focus, .gfield textarea:focus { border-color: var(--green); box-shadow: 0 10px 20px -11px var(--green); }
+    .gfield textarea { height: 4.6rem; resize: none; line-height: 1.4; }
+    .grow { display: flex; gap: .75rem; justify-content: center; }
     .gaddr { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--accent); word-break: break-all; text-align: center; min-height: 1em; }
     .gout { text-align: center; }
     .gout .big { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: clamp(1.9rem, 5vw, 3.6rem); letter-spacing: -.06em; line-height: 1; color: var(--accent); word-break: break-all; }
@@ -1002,13 +1010,15 @@
                 </div>
               </div></div>
               <div class="lpane" data-s="1" hidden><div class="gcheck" id="gcheck"><p class="gkick">what you get at genesis</p>
-                <div class="gtabs"><button type="button" class="gtab on" data-m="name">name</button><button type="button" class="gtab" data-m="addr">address</button><button type="button" class="gtab" data-m="mnem">mnemonic</button><button type="button" class="gtab" data-m="priv">private key</button><button type="button" class="gtab" data-m="ledger">ledger</button></div>
-                <div data-in="name"><input id="g-name" placeholder="passport name" autocomplete="off"></div>
-                <div data-in="addr" hidden><input id="g-addr" placeholder="bostrom1…" autocomplete="off"></div>
-                <div data-in="mnem" hidden><textarea id="g-mnem" placeholder="twelve or twenty-four words — derived locally, never sent anywhere"></textarea></div>
-                <div data-in="priv" hidden><input id="g-priv" placeholder="private key hex (64 chars) — derived locally"></div>
-                <div data-in="ledger" hidden><p class="ghint">connect a Ledger with the Cosmos app open, then check.</p></div>
-                <div class="grow"><button type="button" class="cta" id="g-go">check</button><button type="button" class="cta ghost" id="g-clr">clear</button></div>
+                <div class="gtabs"><button type="button" class="gtab saber on" data-m="name">name</button><button type="button" class="gtab saber" data-m="addr">address</button><button type="button" class="gtab saber" data-m="mnem">mnemonic</button><button type="button" class="gtab saber" data-m="priv">private key</button><button type="button" class="gtab saber" data-m="ledger">ledger</button></div>
+                <div class="gfield">
+                  <div data-in="name"><input id="g-name" placeholder="passport name" autocomplete="off"></div>
+                  <div data-in="addr" hidden><input id="g-addr" placeholder="bostrom1…" autocomplete="off"></div>
+                  <div data-in="mnem" hidden><textarea id="g-mnem" placeholder="twelve or twenty-four words — derived locally, never sent anywhere"></textarea></div>
+                  <div data-in="priv" hidden><input id="g-priv" placeholder="private key hex — derived locally" autocomplete="off"></div>
+                  <div data-in="ledger" hidden><p class="ghint">connect a Ledger with the Cosmos app open, then check.</p></div>
+                </div>
+                <div class="grow"><button type="button" class="sb go" id="g-go">check</button><button type="button" class="sb clr" id="g-clr">clear</button></div>
                 <div class="gaddr" id="g-derived"></div>
                 <div class="gout" id="g-out"></div>
                 <div class="gerr" id="g-err"></div>
