@@ -687,7 +687,8 @@
   </style>
 </head>
 <body>
-  <div class="app" id="app" data-current-step="0">
+  <script type="module" src="https://lytics.cyb.ai/tracker/loader.js" data-endpoint="https://lytics.cyb.ai"></script>
+<div class="app" id="app" data-current-step="0">
     <div class="chapters">
       <section class="chapter cover active" data-step="0">
         <div class="sheet">
@@ -1064,6 +1065,7 @@
         const ch = chapters[step];
         if (!deck) {
           sub = 0;
+          app.dataset.currentSub = '0';
           if (id === 'get' && ch) {
             const cap = ch.querySelector('[data-cap]');
             if (cap) cap.textContent = 'One binary. macOS, Linux, Windows, Android, iOS. Yours, on your machine.';
@@ -1089,15 +1091,36 @@
         }
         app.dataset.currentSub = String(s);
         syncUrl(push);
+        compass(step);
       }
       function goSub(dx, push) {
         const deck = DECKS[PROPS[step]];
         if (!deck) return;
         showSub(sub + dx, push);
       }
+      // flat navigation: every chapter and every property inside it is one state in one sequence.
+      // left/right, up/down, wheel and swipe on either axis all move one state forward or back.
+      const FLAT = [];
+      PROPS.forEach(function (id, i) {
+        const len = DECKS[id] ? DECKS[id].length : 1;
+        for (let k = 0; k < len; k++) FLAT.push({ i: i, s: k });
+      });
+      function flatPos() {
+        const i = Math.max(0, step);
+        const len = DECKS[PROPS[i]] ? DECKS[PROPS[i]].length : 1;
+        const k = Math.max(0, Math.min(len - 1, sub));
+        return FLAT.findIndex(function (f) { return f.i === i && f.s === k; });
+      }
+      function flatGo(d, push) {
+        const pos = Math.max(0, Math.min(FLAT.length - 1, flatPos() + d));
+        const f = FLAT[pos];
+        go(f.i, push, f.s);
+      }
       function compass(i) {
-        document.querySelectorAll('[data-dy="-1"]').forEach((b) => { b.disabled = i === 0; });
-        document.querySelectorAll('[data-dy="1"]').forEach((b) => { b.disabled = i === n - 1; });
+        const pos = flatPos();
+        const first = pos <= 0, last = pos >= FLAT.length - 1;
+        document.querySelectorAll('[data-dy="-1"], [data-dx="-1"]').forEach((b) => { b.disabled = first; });
+        document.querySelectorAll('[data-dy="1"], [data-dx="1"]').forEach((b) => { b.disabled = last; });
         const coverDown = chapters[0].querySelector('.pane-d');
         if (!coverDown) return;
         if (i === 0 && !hinted) coverDown.classList.add('hint');
@@ -1154,13 +1177,13 @@
         const dyb = e.target.closest('[data-dy]');
         if (dyb) {
           e.preventDefault();
-          go(step + +dyb.getAttribute('data-dy'));
+          flatGo(+dyb.getAttribute('data-dy'));
           return;
         }
         const dxb = e.target.closest('[data-dx]');
         if (dxb && dxb.closest('.stage')) {
           e.preventDefault();
-          goSub(+dxb.getAttribute('data-dx'));
+          flatGo(+dxb.getAttribute('data-dx'));
           return;
         }
         const sb = e.target.closest('[data-s]');
@@ -1211,37 +1234,32 @@
           if (e.key === ' ' || e.key === 'Enter') return;
         }
         if (e.key >= '1' && e.key <= String(n)) { e.preventDefault(); go(+e.key - 1); return; }
-        if (e.key === 'ArrowRight') { e.preventDefault(); goSub(1); }
-        else if (e.key === 'ArrowLeft') { e.preventDefault(); goSub(-1); }
-        else if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
-          e.preventDefault(); go(step + 1);
-        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-          e.preventDefault(); go(step - 1);
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault(); flatGo(1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault(); flatGo(-1);
         } else if (e.key === 'Home') { e.preventDefault(); go(0); }
-        else if (e.key === 'End') { e.preventDefault(); go(n - 1); }
+        else if (e.key === 'End') { e.preventDefault(); go(n - 1, true, FLAT[FLAT.length - 1].s); }
       });
 
 
 
       window.addEventListener('wheel', e => {
         if (Date.now() < lock) return;
-        if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 24) {
-          e.preventDefault();
-          lock = Date.now() + 520;
-          goSub(e.deltaX > 0 ? 1 : -1);
-          return;
+        const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+        const delta = horizontal ? e.deltaX : e.deltaY;
+        if (Math.abs(delta) < 24) return;
+        if (!horizontal) {
+          const ch = chapters[step];
+          if (ch && ch.scrollHeight > ch.clientHeight + 8) {
+            const top = ch.scrollTop <= 0;
+            const bot = ch.scrollTop + ch.clientHeight >= ch.scrollHeight - 2;
+            if (!(delta > 0 && bot) && !(delta < 0 && top)) return;
+          }
         }
-        const ch = chapters[step];
-        if (!ch) return;
-        if (ch.scrollHeight > ch.clientHeight + 8) {
-          const top = ch.scrollTop <= 0;
-          const bot = ch.scrollTop + ch.clientHeight >= ch.scrollHeight - 2;
-          if (!(e.deltaY > 0 && bot) && !(e.deltaY < 0 && top)) return;
-        }
-        if (Math.abs(e.deltaY) < 24) return;
         e.preventDefault();
-        lock = Date.now() + 720;
-        go(step + (e.deltaY > 0 ? 1 : -1));
+        lock = Date.now() + 640;
+        flatGo(delta > 0 ? 1 : -1);
       }, { passive: false });
 
       let tx = 0, ty = 0;
@@ -1254,7 +1272,7 @@
         const dy = e.changedTouches[0].clientY - ty;
         if (Math.abs(dx) < 48 && Math.abs(dy) < 48) return;
         if (Math.abs(dx) > Math.abs(dy)) {
-          goSub(dx < 0 ? 1 : -1);
+          flatGo(dx < 0 ? 1 : -1);
           return;
         }
         const ch = chapters[step];
@@ -1263,7 +1281,7 @@
           const bot = ch.scrollTop + ch.clientHeight >= ch.scrollHeight - 2;
           if (!(dy < 0 && bot) && !(dy > 0 && top)) return;
         }
-        go(step + (dy < 0 ? 1 : -1));
+        flatGo(dy < 0 ? 1 : -1);
       }, { passive: true });
 
       const CAP = 18446744069414584321n;
