@@ -440,10 +440,6 @@
     }
     .chart svg { width: 100%; height: auto; display: block; }
     .chart.live svg { cursor: crosshair; touch-action: pan-y; }
-    .probe-out { text-align: center; margin-top: .35rem; font-family: 'JetBrains Mono', monospace; min-height: 2.6em; }
-    .probe-out b { font-size: clamp(1.3rem, 2.6vw, 2rem); letter-spacing: -.05em; color: #fff; }
-    .probe-out em { font-style: normal; font-size: .72rem; color: var(--hl, var(--accent)); margin-left: .3em; }
-    .probe-out span { display: block; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-top: .15rem; }
     .gcheck { width: min(40rem, 100%); display: grid; gap: .55rem; }
     .gkick { font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); text-align: center; }
     .lpane[hidden] { display: none; }
@@ -475,7 +471,6 @@
     .gerr { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--red); text-align: center; }
     .ghint { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--mute); text-align: center; }
     .cmp-note { font-size: .7rem; }
-    .probe-out span { font-size: .72rem; }
     .cap-line {
       margin-top: 0;
       font-family: 'JetBrains Mono', monospace;
@@ -977,7 +972,7 @@
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p class="cap-line"></p>
+            <p data-cap id="emission-cap"></p>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -1610,38 +1605,39 @@
         const G0 = 187416;
         const M = (t) => G0 + (p - G0) * (1 - Math.pow(1 + t / tau, -k));
         const W = 720, H = 260, L = 36, T = 16, R = 12, B = 32;
-        const pw = W - L - R, ph = H - T - B, n = 96;
-        const x = (t) => L + (t / years) * pw;
+        const pw = W - L - R, ph = H - T - B, N = years + 1, bw = pw / N, gap = Math.max(2, bw * .18);
+        const xc = (i) => L + (i + .5) * bw;
         const y = (v) => T + (1 - v / p) * ph;
-        let d = '';
-        for (let i = 0; i <= n; i++) { const t = (i / n) * years; d += (i ? 'L' : 'M') + x(t).toFixed(1) + ' ' + y(M(t)).toFixed(1) + ' '; }
-        const fill = d + 'L' + x(years).toFixed(1) + ' ' + y(0).toFixed(1) + ' L' + x(0).toFixed(1) + ' ' + y(0).toFixed(1) + ' Z';
+        const V = []; for (let i = 0; i < N; i++) V.push(i ? M(i) : G0);
+        let bars = '';
+        for (let i = 0; i < N; i++) bars += '<rect class="bar" data-i="' + i + '" x="' + (L + i * bw + gap / 2).toFixed(1) + '" y="' + Math.min(y(V[i]), y(0) - 4).toFixed(1) + '" width="' + (bw - gap).toFixed(1) + '" height="' + Math.max(4, y(0) - y(V[i])).toFixed(1) + '" fill="' + (i ? 'currentColor' : '#00ff01') + '" fill-opacity="' + (i ? '.32' : '1') + '"/>';
         const ticks = [0, 1, 5, 10, 20];
-        const xt = ticks.map((t) => '<text x="' + x(t).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono,monospace" font-size="11">' + t + 'y</text>').join('');
+        const xt = ticks.map((t) => '<text x="' + xc(t).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" fill="#8a8a8a" font-family="JetBrains Mono,monospace" font-size="11">' + t + 'y</text>').join('');
         el.innerHTML =
           '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet">' +
-          '<line x1="' + L + '" y1="' + y(p).toFixed(1) + '" x2="' + (W - R) + '" y2="' + y(p).toFixed(1) + '" stroke="#222" stroke-dasharray="4 4"/>' +
-          '<path d="' + fill + '" fill="currentColor" fill-opacity=".14"/>' +
-          '<path d="' + d + '" fill="none" stroke="currentColor" stroke-width="2"/>' +
-          '<g class="probe"><line class="pl" x1="' + x(0).toFixed(1) + '" y1="' + T + '" x2="' + x(0).toFixed(1) + '" y2="' + (H - B) + '" stroke="#fff" stroke-opacity=".35" stroke-dasharray="3 3"/><circle class="pd" cx="' + x(0).toFixed(1) + '" cy="' + y(G0).toFixed(1) + '" r="6" fill="#00ff01" stroke="#000" stroke-width="2"/></g>' +
-          '<text x="' + (W - R) + '" y="' + (y(p) + 14).toFixed(1) + '" text-anchor="end" fill="#8a8a8a" font-family="JetBrains Mono,monospace" font-size="11">cap 18.4m</text>' +
-          xt + '</svg>' +
-          '<div class="probe-out" id="emission-out"><b>' + G0.toLocaleString('en-US') + '</b><em>CYB</em><span>at genesis · we are here · 1.0 % of the cap</span></div>';
-        const svg = el.querySelector('svg'), probe = svg.querySelector('.probe'), pl = svg.querySelector('.pl'), pd = svg.querySelector('.pd'), out = document.getElementById('emission-out');
+          '<line x1="' + L + '" y1="' + y(p).toFixed(1) + '" x2="' + (W - R) + '" y2="' + y(p).toFixed(1) + '" stroke="#333" stroke-dasharray="4 4"/>' +
+          bars +
+          '<text x="' + (W - R) + '" y="' + (y(p) - 6).toFixed(1) + '" text-anchor="end" fill="#8a8a8a" font-family="JetBrains Mono,monospace" font-size="11">cap 18.4m</text>' +
+          xt + '</svg>';
+        const svg = el.querySelector('svg'), rects = svg.querySelectorAll('.bar'), cap = document.getElementById('emission-cap');
         const fmt = (v) => Math.round(v).toLocaleString('en-US');
-        const show = (t) => {
-          t = Math.max(0, Math.min(years, t));
-          if (t < 0.02) { pl.setAttribute('x1', x(0)); pl.setAttribute('x2', x(0)); pd.setAttribute('cx', x(0)); pd.setAttribute('cy', y(G0)); pd.setAttribute('fill', '#00ff01'); out.innerHTML = '<b>' + fmt(G0) + '</b><em>CYB</em><span>at genesis · we are here · 1.0 % of the cap</span>'; return; }
-          const v = M(t), px = x(t), py = y(v);
-          pl.setAttribute('x1', px); pl.setAttribute('x2', px); pd.setAttribute('cx', px); pd.setAttribute('cy', py); pd.setAttribute('fill', t < 0.02 ? '#00ff01' : 'currentColor');
-          const yr = t < 1 ? (t * 12).toFixed(0) + ' months' : 'year ' + t.toFixed(1).replace(/\.0$/, '');
-          out.innerHTML = '<b>' + fmt(v) + '</b><em>CYB</em><span>issued by ' + yr + ' · ' + (100 * v / p).toFixed(1) + ' % of the cap</span>';
+        const pct = (v) => (100 * v / p).toFixed(v / p < .1 ? 1 : 0) + ' %';
+        let cur = -1;
+        const show = (i) => {
+          i = Math.max(0, Math.min(years, Math.round(i)));
+          if (i === cur) return; cur = i;
+          rects.forEach((r, k) => { r.setAttribute('fill-opacity', k === i ? '1' : (k ? '.32' : '.55')); });
+          if (!cap) return;
+          if (i === 0) { cap.textContent = 'genesis: ' + fmt(G0) + ' CYB out, ' + pct(G0) + ' of the cap. we are here.'; return; }
+          const infl = 100 * (V[i] - V[i - 1]) / V[i - 1];
+          cap.textContent = 'year ' + i + ': ' + fmt(V[i]) + ' CYB out, ' + pct(V[i]) + ' of the cap. inflation that year ' + (infl >= 100 ? fmt(infl) : infl.toFixed(1)) + ' %.';
         };
-        const toT = (clientX) => { const r = svg.getBoundingClientRect(); const sx = (clientX - r.left) / r.width * W; return (sx - L) / pw * years; };
-        svg.addEventListener('mousemove', (e) => show(toT(e.clientX)));
-        svg.addEventListener('touchstart', (e) => { show(toT(e.touches[0].clientX)); }, { passive: true });
-        svg.addEventListener('touchmove', (e) => { show(toT(e.touches[0].clientX)); e.preventDefault(); }, { passive: false });
+        const toI = (clientX) => { const r = svg.getBoundingClientRect(); const sx = (clientX - r.left) / r.width * W; return (sx - L) / bw - .5; };
+        svg.addEventListener('mousemove', (e) => show(toI(e.clientX)));
+        svg.addEventListener('touchstart', (e) => { show(toI(e.touches[0].clientX)); }, { passive: true });
+        svg.addEventListener('touchmove', (e) => { show(toI(e.touches[0].clientX)); e.preventDefault(); }, { passive: false });
         svg.addEventListener('mouseleave', () => show(0));
+        show(0);
         el.classList.add('live');
       })();
 
