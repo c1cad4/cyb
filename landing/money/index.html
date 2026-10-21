@@ -17,7 +17,7 @@
   <meta name="twitter:title" content="CYB — the best money">
   <meta name="twitter:description" content="The more the network learns, the better the money.">
   <meta name="twitter:image" content="https://cyb.money/og.jpg">
-  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="gf" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="%23b6ffcc"/><stop offset=".45" stop-color="%2300ff41"/><stop offset="1" stop-color="%23007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(%23gf)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="%23003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="%23003d10" stroke-opacity=".35" stroke-width="1"/></svg>'>
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="gf" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="%23b6ffcc"/><stop offset=".45" stop-color="%2300ff41"/><stop offset="1" stop-color="%23007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(%23gf)"/></svg>'>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -775,7 +775,7 @@
           <div class="stage">
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
-              <h1 class="ticker"><span class="ico globe" aria-hidden="true"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gt" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gt)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/></svg></span><span class="name">CYB</span></h1>
+              <h1 class="ticker"><span class="ico globe" aria-hidden="true"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gt" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gt)"/></svg></span><span class="name">CYB</span></h1>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
@@ -954,14 +954,13 @@
               <div class="supply">
                 <kbd>THE CAP · NEVER MORE</kbd>
                 <b id="v-cap">18,446,744<em>CYB</em></b>
-                <p class="gen-line"><strong id="gen-scarce">187,416 CYB</strong> at genesis — 1 % of the cap, to TOCYB holders at ×666. the rest is minted only when the network learns.</p>
               </div>
               <div class="chart" id="emission"></div>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p class="cap-line">power-law emission, illustrative — hover the curve to see what is out by when</p>
+            <p class="cap-line"></p>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -1423,7 +1422,7 @@
         const native = tocybSupply * X;
         const shown = fmtCyb(native);
         document.getElementById('v-cap').innerHTML = fmtCyb(CAP) + '<em>CYB</em>';
-        const gs = document.getElementById('gen-scarce'); if (gs) gs.textContent = shown + ' CYB';
+
       }
       valuation();
 
@@ -1485,7 +1484,7 @@
           eth: ['Ξ', '#8b9cff'], sol: ['◎', '#14f195'], xrp: ['✕', '#9aa4b2'], bnb: ['B', '#f3ba2f'], trx: ['T', '#ff4b4b'], usd: ['$', '#00b4ff'], cny: ['¥', '#ff4d4d'], eur: ['€', '#4d7cff'], cyb: ['', '#00ff01']
         };
         const flag = '<svg viewBox="15.5 15 69 68" aria-hidden="true"><circle cx="50" cy="26.25" r="10" fill="#00ff01"/><circle cx="68.57" cy="35.19" r="10" fill="#00b4ff"/><circle cx="73.15" cy="55.28" r="10" fill="#1700fe"/><circle cx="60.30" cy="71.40" r="10" fill="#6b00fe"/><circle cx="39.70" cy="71.40" r="10" fill="#fe0000"/><circle cx="26.85" cy="55.28" r="10" fill="#ff6501"/><circle cx="31.43" cy="35.19" r="10" fill="#ffc501"/></svg>';
-        const CUSTOM = { cyb: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gc" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gc)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/></svg>', xmr: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><clipPath id="xmrc"><circle cx="20" cy="20" r="18"/></clipPath></defs><circle cx="20" cy="20" r="18" fill="#ff6600"/><rect x="0" y="25" width="40" height="15" fill="#4c4c4c" clip-path="url(#xmrc)"/><path d="M9 32V13l11 11 11-11v19" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="miter" clip-path="url(#xmrc)"/><rect x="0" y="25" width="40" height="15" fill="none"/></svg>', sol: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="solg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#9945ff"/><stop offset="1" stop-color="#14f195"/></linearGradient></defs><circle cx="20" cy="20" r="18" fill="#0b0b0b" stroke="#14f195" stroke-opacity=".5" stroke-width="1.4"/><path d="M12.5 11.5h16.5l-3.8 3.8H8.7zM12.5 24.7h16.5l-3.8 3.8H8.7zM8.7 18.1h16.5l3.8 3.8H12.5z" fill="url(#solg)"/></svg>', zec: '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#f4b728"/><path d="M13 12h14v3l-9.5 10H27v3H13v-3l9.5-10H13zM18.5 8h3v4.5h-3zM18.5 27.5h3V32h-3z" fill="#231f20"/></svg>' };
+        const CUSTOM = { cyb: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gc" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gc)"/></svg>', xmr: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><clipPath id="xmrc"><circle cx="20" cy="20" r="18"/></clipPath></defs><circle cx="20" cy="20" r="18" fill="#ff6600"/><rect x="0" y="25" width="40" height="15" fill="#4c4c4c" clip-path="url(#xmrc)"/><path d="M9 32V13l11 11 11-11v19" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="miter" clip-path="url(#xmrc)"/><rect x="0" y="25" width="40" height="15" fill="none"/></svg>', sol: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="solg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#9945ff"/><stop offset="1" stop-color="#14f195"/></linearGradient></defs><circle cx="20" cy="20" r="18" fill="#0b0b0b" stroke="#14f195" stroke-opacity=".5" stroke-width="1.4"/><path d="M12.5 11.5h16.5l-3.8 3.8H8.7zM12.5 24.7h16.5l-3.8 3.8H8.7zM8.7 18.1h16.5l3.8 3.8H12.5z" fill="url(#solg)"/></svg>', zec: '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#f4b728"/><path d="M13 12h14v3l-9.5 10H27v3H13v-3l9.5-10H13zM18.5 8h3v4.5h-3zM18.5 27.5h3V32h-3z" fill="#231f20"/></svg>' };
         const icon = (k) => {
           if (CUSTOM[k]) return CUSTOM[k];
           const [g, c] = ICON[k];
@@ -1618,25 +1617,25 @@
           '<line x1="' + L + '" y1="' + y(p).toFixed(1) + '" x2="' + (W - R) + '" y2="' + y(p).toFixed(1) + '" stroke="#222" stroke-dasharray="4 4"/>' +
           '<path d="' + fill + '" fill="currentColor" fill-opacity=".14"/>' +
           '<path d="' + d + '" fill="none" stroke="currentColor" stroke-width="2"/>' +
-          '<g class="probe" style="display:none"><line class="pl" x1="0" y1="' + T + '" x2="0" y2="' + (H - B) + '" stroke="#fff" stroke-opacity=".35" stroke-dasharray="3 3"/><circle class="pd" r="5" fill="currentColor" stroke="#000" stroke-width="2"/></g>' +
+          '<g class="probe"><line class="pl" x1="' + x(0).toFixed(1) + '" y1="' + T + '" x2="' + x(0).toFixed(1) + '" y2="' + (H - B) + '" stroke="#fff" stroke-opacity=".35" stroke-dasharray="3 3"/><circle class="pd" cx="' + x(0).toFixed(1) + '" cy="' + y(G0).toFixed(1) + '" r="6" fill="#00ff01" stroke="#000" stroke-width="2"/></g>' +
           '<text x="' + (W - R) + '" y="' + (y(p) + 14).toFixed(1) + '" text-anchor="end" fill="#8a8a8a" font-family="JetBrains Mono,monospace" font-size="11">cap 18.4m</text>' +
           xt + '</svg>' +
-          '<div class="probe-out" id="emission-out"><b>' + G0.toLocaleString('en-US') + '</b><em>CYB</em><span>at genesis · 1.0 % of the cap · year 0</span></div>';
+          '<div class="probe-out" id="emission-out"><b>' + G0.toLocaleString('en-US') + '</b><em>CYB</em><span>at genesis · we are here · 1.0 % of the cap</span></div>';
         const svg = el.querySelector('svg'), probe = svg.querySelector('.probe'), pl = svg.querySelector('.pl'), pd = svg.querySelector('.pd'), out = document.getElementById('emission-out');
         const fmt = (v) => Math.round(v).toLocaleString('en-US');
         const show = (t) => {
           t = Math.max(0, Math.min(years, t));
+          if (t < 0.02) { pl.setAttribute('x1', x(0)); pl.setAttribute('x2', x(0)); pd.setAttribute('cx', x(0)); pd.setAttribute('cy', y(G0)); pd.setAttribute('fill', '#00ff01'); out.innerHTML = '<b>' + fmt(G0) + '</b><em>CYB</em><span>at genesis · we are here · 1.0 % of the cap</span>'; return; }
           const v = M(t), px = x(t), py = y(v);
-          probe.style.display = '';
-          pl.setAttribute('x1', px); pl.setAttribute('x2', px); pd.setAttribute('cx', px); pd.setAttribute('cy', py);
+          pl.setAttribute('x1', px); pl.setAttribute('x2', px); pd.setAttribute('cx', px); pd.setAttribute('cy', py); pd.setAttribute('fill', t < 0.02 ? '#00ff01' : 'currentColor');
           const yr = t < 1 ? (t * 12).toFixed(0) + ' months' : 'year ' + t.toFixed(1).replace(/\.0$/, '');
-          out.innerHTML = '<b>' + fmt(v) + '</b><em>CYB</em><span>issued by ' + yr + ' · ' + (100 * v / p).toFixed(1) + ' % of the cap · ' + fmt(p - v) + ' still to earn</span>';
+          out.innerHTML = '<b>' + fmt(v) + '</b><em>CYB</em><span>issued by ' + yr + ' · ' + (100 * v / p).toFixed(1) + ' % of the cap</span>';
         };
         const toT = (clientX) => { const r = svg.getBoundingClientRect(); const sx = (clientX - r.left) / r.width * W; return (sx - L) / pw * years; };
         svg.addEventListener('mousemove', (e) => show(toT(e.clientX)));
         svg.addEventListener('touchstart', (e) => { show(toT(e.touches[0].clientX)); }, { passive: true });
         svg.addEventListener('touchmove', (e) => { show(toT(e.touches[0].clientX)); e.preventDefault(); }, { passive: false });
-        svg.addEventListener('mouseleave', () => { probe.style.display = 'none'; out.innerHTML = '<b>' + fmt(G0) + '</b><em>CYB</em><span>at genesis · 1.0 % of the cap · year 0</span>'; });
+        svg.addEventListener('mouseleave', () => show(0));
         el.classList.add('live');
       })();
 
