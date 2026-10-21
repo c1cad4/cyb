@@ -17,7 +17,7 @@
   <meta name="twitter:title" content="CYB — the best money">
   <meta name="twitter:description" content="The more the network learns, the better the money.">
   <meta name="twitter:image" content="https://cyb.money/og.jpg">
-  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="15.5 15 69 68"><circle cx="50" cy="26.25" r="10" fill="%2300ff01"/><circle cx="68.57" cy="35.19" r="10" fill="%2300b4ff"/><circle cx="73.15" cy="55.28" r="10" fill="%231700fe"/><circle cx="60.30" cy="71.40" r="10" fill="%236b00fe"/><circle cx="39.70" cy="71.40" r="10" fill="%23fe0000"/><circle cx="26.85" cy="55.28" r="10" fill="%23ff6501"/><circle cx="31.43" cy="35.19" r="10" fill="%23ffc501"/></svg>'>
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="gf" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="%23b6ffcc"/><stop offset=".45" stop-color="%2300ff41"/><stop offset="1" stop-color="%23007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(%23gf)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="%23003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="%23003d10" stroke-opacity=".35" stroke-width="1"/></svg>'>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -128,6 +128,7 @@
       line-height: .76;
       color: var(--green);
     }
+    .ticker .ico.globe svg { width: .78em; height: .78em; display: block; filter: drop-shadow(0 0 18px rgba(0,255,65,.45)); }
     .ticker .ico {
       font-size: .58em;
       line-height: 1;
@@ -780,7 +781,7 @@
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
               <div class="capfront">
-                <h1 class="ticker"><span class="ico" aria-hidden="true">🟢</span><span class="name">CYB</span></h1>
+                <h1 class="ticker"><span class="ico globe" aria-hidden="true"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gt" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gt)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/></svg></span><span class="name">CYB</span></h1>
                 <b class="capnum" id="cap-front">18,446,744<em>CYB</em></b>
                 <kbd>the cap · never more</kbd>
                 <p class="gen-line"><strong id="gen-front">187,416 CYB</strong> at genesis — 1 % of the cap, to TOCYB holders at ×666. the rest is minted only when the network learns.</p>
@@ -837,7 +838,7 @@
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
               <div class="rows">
-                <div class="row" data-s="0"><i class="y"></i><kbd>PRIVATE</kbd><b>Unseen</b></div>
+                <div class="row" data-s="0"><i class="y"></i><kbd>PRIVATE</kbd><b>Nobody learns who</b></div>
                 <div class="row" data-s="1"><i class="i"></i><kbd>DURABLE</kbd><b>Post-quantum</b></div>
                 <div class="row" data-s="2"><i class="r"></i><kbd>UNCENSORABLE</kbd><b>No freeze</b></div>
                 <div class="row" data-s="3"><i class="g"></i><kbd>VERIFIABLE</kbd><b>Zheng</b></div>
@@ -1082,7 +1083,7 @@
           { slug: 'information', caption: 'Information money: minted when the network learns. The work is the proof, the proof is the answer, and the answer is what people pay for. Not launched yet.' }
         ],
         safe: [
-          { slug: 'private', kbd: 'PRIVATE', punch: 'Unseen', dot: 'y', caption: 'Unseen by default. A zheng proof can show a hop is valid without showing the amount — the witness stays in the proof, not on a public line.' },
+          { slug: 'private', kbd: 'PRIVATE', punch: 'Nobody learns who', dot: 'y', caption: 'One shielded pool. A payment proves it balances without showing the amount or the payer. Speaking is spending: what is said is public, who said it is not. No admin, no viewing key.' },
           { slug: 'durable', kbd: 'DURABLE', punch: 'Post-quantum', dot: 'i', caption: 'Hash-only proofs, post-quantum signatures. Several independent implementations that cross-check each other. Time does not eat it.' },
           { slug: 'uncensorable', kbd: 'UNCENSORABLE', punch: 'No freeze', dot: 'r', caption: 'No admin key. Nobody freezes or seizes an account. Kill one binary and the others still settle — the protocol has no switch-off.' },
           { slug: 'verifiable', kbd: 'VERIFIABLE', punch: 'Zheng', dot: 'g', caption: 'Every mint and every move carries a zheng proof: SuperSpartan over Goldilocks, no trusted setup. Check O(log n) against the header. You verify. You do not trust a node.' }
@@ -1492,8 +1493,9 @@
           eth: ['Ξ', '#8b9cff'], sol: ['◎', '#14f195'], xrp: ['✕', '#9aa4b2'], bnb: ['B', '#f3ba2f'], trx: ['T', '#ff4b4b'], usd: ['$', '#00b4ff'], cny: ['¥', '#ff4d4d'], eur: ['€', '#4d7cff'], cyb: ['', '#00ff01']
         };
         const flag = '<svg viewBox="15.5 15 69 68" aria-hidden="true"><circle cx="50" cy="26.25" r="10" fill="#00ff01"/><circle cx="68.57" cy="35.19" r="10" fill="#00b4ff"/><circle cx="73.15" cy="55.28" r="10" fill="#1700fe"/><circle cx="60.30" cy="71.40" r="10" fill="#6b00fe"/><circle cx="39.70" cy="71.40" r="10" fill="#fe0000"/><circle cx="26.85" cy="55.28" r="10" fill="#ff6501"/><circle cx="31.43" cy="35.19" r="10" fill="#ffc501"/></svg>';
+        const CUSTOM = { cyb: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gc" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gc)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/></svg>', xmr: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><clipPath id="xmrc"><circle cx="20" cy="20" r="18"/></clipPath></defs><circle cx="20" cy="20" r="18" fill="#ff6600"/><rect x="0" y="25" width="40" height="15" fill="#4c4c4c" clip-path="url(#xmrc)"/><path d="M9 32V13l11 11 11-11v19" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="miter" clip-path="url(#xmrc)"/><rect x="0" y="25" width="40" height="15" fill="none"/></svg>', sol: '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="solg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#9945ff"/><stop offset="1" stop-color="#14f195"/></linearGradient></defs><circle cx="20" cy="20" r="18" fill="#0b0b0b" stroke="#14f195" stroke-opacity=".5" stroke-width="1.4"/><path d="M12.5 11.5h16.5l-3.8 3.8H8.7zM12.5 24.7h16.5l-3.8 3.8H8.7zM8.7 18.1h16.5l3.8 3.8H12.5z" fill="url(#solg)"/></svg>', zec: '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#f4b728"/><path d="M13 12h14v3l-9.5 10H27v3H13v-3l9.5-10H13zM18.5 8h3v4.5h-3zM18.5 27.5h3V32h-3z" fill="#231f20"/></svg>' };
         const icon = (k) => {
-          if (k === 'cyb') return flag;
+          if (CUSTOM[k]) return CUSTOM[k];
           const [g, c] = ICON[k];
           const fs = g.length > 1 ? 17 : 22;
           return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="' + c + '" fill-opacity=".14" stroke="' + c + '" stroke-width="1.6"/><text x="20" y="21" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-weight="700" font-size="' + fs + '" fill="' + c + '">' + g + '</text></svg>';
