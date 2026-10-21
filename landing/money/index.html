@@ -232,9 +232,10 @@
     }
     .caption p {
       margin: 0;
-      max-width: 48ch;
-      font-size: clamp(.95rem, 1.7vw, 1.2rem);
-      line-height: 1.35;
+      max-width: 46ch;
+      font-size: clamp(1.15rem, 2vw, 1.5rem);
+      line-height: 1.3;
+      letter-spacing: -.01em;
       color: var(--ink);
     }
     .subdots {
@@ -281,7 +282,7 @@
       color: #fff;
     }
     .sheet h2 {
-      font-size: clamp(1.4rem, 2.7vw, 2.15rem);
+      font-size: clamp(1.75rem, 3.4vw, 2.8rem);
       letter-spacing: -.04em;
       line-height: 1.08;
       margin: 0;
@@ -461,6 +462,8 @@
     .gout .pass b { color: #fff; }
     .gerr { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--red); text-align: center; }
     .ghint { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--mute); text-align: center; }
+    .cmp-note { font-size: .7rem; }
+    .probe-out span { font-size: .72rem; }
     .cap-line {
       margin-top: 0;
       font-family: 'JetBrains Mono', monospace;
@@ -731,7 +734,8 @@
       .caption .belong { font-size: 1.15rem; }
       .phrase { padding: calc(2.2rem + env(safe-area-inset-top)) 16px 4px; }
       .caption { padding: 6px 16px 2.4rem; }
-      .sheet h2 { font-size: 1.28rem; }
+      .sheet h2 { font-size: 1.7rem; }
+      .caption p { font-size: 1.12rem; line-height: 1.3; max-width: 32ch; }
       .prop b { font-size: 2.15rem; }
       .stage { grid-template-columns: 2rem minmax(0, 1fr) 2rem; }
       .row { column-gap: .6rem; font-size: 1.15rem; }
@@ -1066,27 +1070,27 @@
       };
       const DECKS = {
         smart: [
-          { slug: 'force', caption: 'Force money: issued as debt by a state and its banks, backed by the land it holds and the army that holds it. The obligation is worth what the territory can be taxed for. The broad money of three states dwarfs every other kind.' },
-          { slug: 'production', caption: 'Production money: dug, refined, stored. Its supply is whatever the mines add — about 1.5% a year for gold — and its worth is the labour it took.' },
-          { slug: 'energy', caption: 'Energy money: minted by burning electricity into hashes. Honest and scarce, but the work itself is thrown away — the hash proves nothing anyone needs.' },
-          { slug: 'capital', caption: 'Capital money: minted by locking capital and validating. Cheap to run, yet the bag decides who mints — wealth makes wealth.' },
-          { slug: 'information', caption: 'Information money: minted when the network learns. The work is the proof, the proof is the answer, and the answer is what people pay for. Not launched yet.' }
+          { slug: 'force', caption: 'Force money: issued as debt, backed by the land a state holds and the army that holds it.' },
+          { slug: 'production', caption: 'Production money: dug, refined, stored. Supply is what the mines add; worth is the labour it took.' },
+          { slug: 'energy', caption: 'Energy money: minted by burning electricity into hashes. Scarce and honest, but the work is thrown away.' },
+          { slug: 'capital', caption: 'Capital money: minted by locking capital. Cheap to run, but the bag decides who mints.' },
+          { slug: 'information', caption: 'Information money: minted when the network learns. The work is the proof, the proof is the answer.' }
         ],
         safe: [
-          { slug: 'private', kbd: 'PRIVATE', punch: 'Nobody learns who', dot: 'y', caption: 'One shielded pool. A payment proves it balances without showing the amount or the payer. Speaking is spending: what is said is public, who said it is not. No admin, no viewing key.' },
-          { slug: 'durable', kbd: 'DURABLE', punch: 'Post-quantum', dot: 'i', caption: 'Hash-only proofs, post-quantum signatures. Several independent implementations that cross-check each other. Time does not eat it.' },
-          { slug: 'uncensorable', kbd: 'UNCENSORABLE', punch: 'No freeze', dot: 'r', caption: 'No admin key. Nobody freezes or seizes an account. Kill one binary and the others still settle — the protocol has no switch-off.' },
-          { slug: 'verifiable', kbd: 'VERIFIABLE', punch: 'Zheng', dot: 'g', caption: 'Every mint and every move carries a zheng proof: SuperSpartan over Goldilocks, no trusted setup. Check O(log n) against the header. You verify. You do not trust a node.' }
+          { slug: 'private', kbd: 'PRIVATE', punch: 'Nobody learns who', dot: 'y', caption: 'One shielded pool: a payment proves it balances without showing the amount or the payer.' },
+          { slug: 'durable', kbd: 'DURABLE', punch: 'Post-quantum', dot: 'i', caption: 'Hash-only proofs, post-quantum signatures, implementations that cross-check. Time does not eat it.' },
+          { slug: 'uncensorable', kbd: 'UNCENSORABLE', punch: 'No freeze', dot: 'r', caption: 'No admin key. Nobody freezes or seizes an account. Kill one binary and the others still settle.' },
+          { slug: 'verifiable', kbd: 'VERIFIABLE', punch: 'Zheng', dot: 'g', caption: 'Every mint and every move carries a zheng proof, no trusted setup. You verify, you do not trust.' }
         ],
         easy: [
           { slug: 'simple', kbd: 'SIMPLE', punch: 'Hold, send, receive', dot: 'y', caption: 'Hold, send, receive — that is the whole money. Coins and a cyberlink. No extra product to rent.' },
-          { slug: 'fast', kbd: 'FAST', punch: '1 second', dot: 'g', caption: 'Foculus clock A. One second to final. Fold packs the proofs so the whole network accepts one claim.' },
-          { slug: 'cheap', kbd: 'CHEAP', punch: '0.1%', dot: 'b', caption: '0.1% is a consensus parameter, not a company fee. Proof cost stays flat from a million particles to a quadrillion — a phone proves its own hops. Visa asks more.' },
+          { slug: 'fast', kbd: 'FAST', punch: '1 second', dot: 'g', caption: 'One second to final. Fold packs the proofs so the whole network accepts one claim.' },
+          { slug: 'cheap', kbd: 'CHEAP', punch: '0.1%', dot: 'b', caption: '0.1% is a consensus parameter, not a company fee. A phone proves its own hops. Visa asks more.' },
           { slug: 'open', kbd: 'OPEN', punch: 'Anyone', dot: 'r', caption: 'Humans, agents, animals. A key, not a passport. No KYC, and no government in the path.' },
           { slug: 'named', kbd: 'NAMED', punch: 'A name', dot: 'o', caption: 'Send to a name. oikos resolves it to one particle — latest link wins. Not a 64-byte address.' },
-          { slug: 'light', kbd: 'LIGHT', punch: 'A phone', dot: 'p', caption: 'A phone is sure it sent and received. It follows the fold tip and samples availability. It never stores the world.' },
+          { slug: 'light', kbd: 'LIGHT', punch: 'A phone', dot: 'p', caption: 'A phone is sure it sent and received. It follows the fold tip and never stores the world.' },
           { slug: 'divisible', kbd: 'DIVISIBLE', punch: '10¹² cy', dot: 'i', caption: '1 CYB = 10¹² cy. Native arithmetic, any amount, down to one cy — not a display trick.' },
-          { slug: 'scalable', kbd: 'SCALABLE', punch: '10⁶ /s', dot: 'g', caption: 'Fold, locality, parallel settlement. About a million signals a second per machine. Load grows. The proof stays small.' }
+          { slug: 'scalable', kbd: 'SCALABLE', punch: '10⁶ /s', dot: 'g', caption: 'Fold, locality, parallel settlement: a million signals a second per machine, one small proof.' }
         ],
         useful: [
           { slug: 'compute', kbd: 'COMPUTE', punch: 'Prove', dot: 'g', caption: 'Cycles. The work of proving.' },
@@ -1100,8 +1104,8 @@
           { slug: 'self', caption: 'Public good the cybergraph names. Spent on what the graph infers is worth doing.' }
         ],
         growing: [
-          { slug: 'fairness', caption: 'A larger population returns here: more minds on the work. Hashrate splits who taught what — no bag required.' },
-          { slug: 'finality', caption: 'Fair work is useless if it does not stick. Fold packs those proofs into one claim the whole network accepts.' },
+          { slug: 'fairness', caption: 'A larger population returns here: more minds on the work. Hashrate splits who taught what.' },
+          { slug: 'finality', caption: 'Fair work is useless if it does not stick. Fold packs the proofs into one claim the network accepts.' },
           { slug: 'truth', caption: 'Final settlement is what staking can trust. Capital takes a side because the fold will hold.' },
           { slug: 'intelligence', caption: 'Fair split, final fold, staked truth — denser knowledge. That is answers.' },
           { slug: 'revenue', caption: 'Intelligence is used. Every move pays 0.1% — a third burns, a third to earners, a third to self.' },
