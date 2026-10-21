@@ -238,6 +238,7 @@
       letter-spacing: -.01em;
       color: var(--ink);
     }
+    .caption .subdots { margin-bottom: .5rem; }
     .subdots {
       display: flex;
       gap: 7px;
@@ -444,6 +445,9 @@
     .probe-out em { font-style: normal; font-size: .72rem; color: var(--hl, var(--accent)); margin-left: .3em; }
     .probe-out span { display: block; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-top: .15rem; }
     .gcheck { width: min(40rem, 100%); display: grid; gap: .55rem; }
+    .gkick { font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); text-align: center; }
+    .lpane[hidden] { display: none; }
+    .lpane { width: 100%; display: flex; justify-content: center; }
     .gtabs { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; }
     .gtab { font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .08em; padding: .4rem .8rem; border-radius: 999px; box-shadow: inset 0 0 0 1px #2a2a2a; color: var(--mute); }
     .gtab.on { color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
@@ -633,7 +637,7 @@
       min-width: 0;
       overflow: visible;
       display: grid;
-      grid-template-columns: repeat(10, minmax(0, 1fr));
+      grid-template-columns: repeat(9, minmax(0, 1fr));
       min-height: 3.25rem;
     }
     .dot {
@@ -733,7 +737,8 @@
       .belong { font-size: 1.15rem; }
       .caption .belong { font-size: 1.15rem; }
       .phrase { padding: calc(2.2rem + env(safe-area-inset-top)) 16px 4px; }
-      .caption { padding: 6px 16px 2.4rem; }
+      .caption { padding: 6px 16px 2.6rem; }
+      .caption p { font-size: 1.05rem; line-height: 1.28; max-width: 34ch; }
       .sheet h2 { font-size: 1.7rem; }
       .caption p { font-size: 1.12rem; line-height: 1.3; max-width: 32ch; }
       .prop b { font-size: 2.15rem; }
@@ -970,38 +975,7 @@
         </div>
       </section>
 
-      <section class="chapter tone-c" data-step="8">
-        <div class="sheet">
-          <div class="phrase">
-            <button type="button" class="pane-btn pane-u" data-dy="-1" aria-label="Previous quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 15.2 L12 6.4 l8.4 8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
-            <h2>What you get <span class="hl">at genesis.</span></h2>
-          </div>
-          <div class="stage">
-            <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
-            <div class="pane">
-              <div class="gcheck" id="gcheck">
-                <div class="gtabs"><button type="button" class="gtab on" data-m="name">name</button><button type="button" class="gtab" data-m="addr">address</button><button type="button" class="gtab" data-m="mnem">mnemonic</button><button type="button" class="gtab" data-m="priv">private key</button><button type="button" class="gtab" data-m="ledger">ledger</button></div>
-                <div data-in="name"><input id="g-name" placeholder="passport name" autocomplete="off"></div>
-                <div data-in="addr" hidden><input id="g-addr" placeholder="bostrom1…" autocomplete="off"></div>
-                <div data-in="mnem" hidden><textarea id="g-mnem" placeholder="twelve or twenty-four words — derived locally, never sent anywhere"></textarea></div>
-                <div data-in="priv" hidden><input id="g-priv" placeholder="private key hex (64 chars) — derived locally"></div>
-                <div data-in="ledger" hidden><p class="ghint">connect a Ledger with the Cosmos app open, then check.</p></div>
-                <div class="grow"><button type="button" class="cta" id="g-go">check</button><button type="button" class="cta ghost" id="g-clr">clear</button></div>
-                <div class="gaddr" id="g-derived"></div>
-                <div class="gout" id="g-out"></div>
-                <div class="gerr" id="g-err"></div>
-              </div>
-            </div>
-            <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
-          </div>
-          <div class="caption">
-            <p data-cap>TOCYB on bostrom becomes CYB at the $CYB genesis, ×666. read from the bostrom burial snapshot, in your browser; keys never leave this page.</p>
-            <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
-          </div>
-        </div>
-      </section>
-
-      <section class="chapter tone-w" data-step="9">
+      <section class="chapter tone-w" data-step="8" data-deck="launch">
         <div class="sheet">
           <div class="phrase">
             <button type="button" class="pane-btn pane-u" data-dy="-1" aria-label="Previous quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 15.2 L12 6.4 l8.4 8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
@@ -1010,7 +984,7 @@
           <div class="stage">
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
-              <div class="get">
+              <div class="lpane" data-s="0"><div class="get">
                 <a class="cta" id="dl" href="https://github.com/cyberia-to/cyb/releases/download/v0.16.0/cyb-0.16.0.dmg">Get the robot</a>
                 <div class="oses" aria-label="download for your machine">
                   <a class="os" data-os="mac" href="https://github.com/cyberia-to/cyb/releases/download/v0.16.0/cyb-0.16.0.dmg" title="macOS" aria-label="macOS"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.7 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.9-3.4-1.9-1.4-.2-2.8.9-3.5.9s-2-.8-3.4-.8c-1.7.1-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.3 2.5 1.3-.1 1.8-.8 3.4-.8s2 .8 3.4.8c1.8 0 3.1-1.6 4.2-3.1 1-1.4 1.4-2.7 1.4-2.8 0 0-2.8-1.1-2.8-4.2zm-2.4-7.1c.7-.9 1.2-2.1 1.1-3.3-1 .1-2.3.7-3 1.6-.7.8-1.2 2.1-1.1 3.2 1.1.1 2.2-.6 3-1.5z"/></svg></a>
@@ -1026,12 +1000,25 @@
                   <a class="row" href="https://cyber.page" target="_blank" rel="noopener" data-get="protocol"><i class="b"></i><kbd>CYBER.PAGE</kbd><b>The protocol</b></a>
                   <a class="row" href="https://soft3.org" target="_blank" rel="noopener" data-get="stack"><i class="y"></i><kbd>SOFT3.ORG</kbd><b>The stack</b></a>
                 </div>
-              </div>
+              </div></div>
+              <div class="lpane" data-s="1" hidden><div class="gcheck" id="gcheck"><p class="gkick">what you get at genesis</p>
+                <div class="gtabs"><button type="button" class="gtab on" data-m="name">name</button><button type="button" class="gtab" data-m="addr">address</button><button type="button" class="gtab" data-m="mnem">mnemonic</button><button type="button" class="gtab" data-m="priv">private key</button><button type="button" class="gtab" data-m="ledger">ledger</button></div>
+                <div data-in="name"><input id="g-name" placeholder="passport name" autocomplete="off"></div>
+                <div data-in="addr" hidden><input id="g-addr" placeholder="bostrom1…" autocomplete="off"></div>
+                <div data-in="mnem" hidden><textarea id="g-mnem" placeholder="twelve or twenty-four words — derived locally, never sent anywhere"></textarea></div>
+                <div data-in="priv" hidden><input id="g-priv" placeholder="private key hex (64 chars) — derived locally"></div>
+                <div data-in="ledger" hidden><p class="ghint">connect a Ledger with the Cosmos app open, then check.</p></div>
+                <div class="grow"><button type="button" class="cta" id="g-go">check</button><button type="button" class="cta ghost" id="g-clr">clear</button></div>
+                <div class="gaddr" id="g-derived"></div>
+                <div class="gout" id="g-out"></div>
+                <div class="gerr" id="g-err"></div>
+              </div></div>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p data-cap>CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 in <span data-days>—</span>. CYB follows once proving and encryption are stable — claims first, transfers later.</p>
+            <p data-cap>Not launched. First the chains: bostrom and space pussy are reborn in <span data-days>—</span>. Then CYB, claims first.</p>
+            <div class="subdots" data-dots></div>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -1048,8 +1035,7 @@
         <button type="button" class="dot y" data-go="5" data-prop="alive" title="Inflation bootstraps. Use replaces it." aria-label="Alive"><span>Alive</span></button>
         <button type="button" class="dot o" data-go="6" data-prop="growing" title="The more the network learns, the better the money." aria-label="Growing"><span>Growing</span></button>
         <button type="button" class="dot bl" data-go="7" data-prop="scarce" title="This is already out. Most is still unearned." aria-label="Scarce"><span>Scarce</span></button>
-        <button type="button" class="dot b" data-go="8" data-prop="genesis" title="What you get at genesis." aria-label="Genesis"><span>Genesis</span></button>
-        <button type="button" class="dot w getcyb" data-go="9" data-prop="launch" title="Not launched yet. First, the chains." aria-label="launch"><span>launch</span></button>
+        <button type="button" class="dot w getcyb" data-go="8" data-prop="launch" title="Not launched yet. First, the chains." aria-label="launch"><span>launch</span></button>
       </nav>
     </div>
   </div>
@@ -1059,16 +1045,20 @@
       const app = document.getElementById('app');
       const chapters = [...document.querySelectorAll('.chapter')];
       const n = chapters.length;
-      const PROPS = ['best', 'smart', 'safe', 'easy', 'useful', 'alive', 'growing', 'scarce', 'genesis', 'launch'];
+      const PROPS = ['best', 'smart', 'safe', 'easy', 'useful', 'alive', 'growing', 'scarce', 'launch'];
       const ALIAS = {
         complete: 0,
         spend: 4, resources: 4, use: 4,
         viable: 5, sustain: 5, sustainable: 5, sustainably: 5, living: 5,
         compound: 6, compounding: 6, looped: 6, ring: 6,
         fair: 7, finite: 7,
-        get: 9, download: 9, robot: 9, claim: 8, balance: 8, check: 8
+        get: 8, download: 8, robot: 8, claim: 8, balance: 8, check: 8
       };
       const DECKS = {
+        launch: [
+          { slug: 'chains', caption: '' },
+          { slug: 'genesis', caption: 'TOCYB on bostrom becomes CYB at genesis, ×666. Read in your browser; keys never leave this page.' }
+        ],
         smart: [
           { slug: 'force', caption: 'Force money: issued as debt, backed by the land a state holds and the army that holds it.' },
           { slug: 'production', caption: 'Production money: dug, refined, stored. Supply is what the mines add; worth is the labour it took.' },
@@ -1113,11 +1103,13 @@
           { slug: 'population', caption: 'Cheaper chips, plus a residual on every robot you ship. Then fairness starts again, larger.' }
         ]
       };
+      const painters = {};
       const REBIRTH = Date.parse('2026-11-05T13:22:42Z'); // bostrom block 1 + five years to the second
       const daysLeft = () => { const d = (REBIRTH - Date.now()) / 864e5; if (d <= 0) return 'now — the chains are live'; const n = Math.ceil(d); return n === 1 ? 'one day' : n + ' days'; };
-      const LAUNCH_CAP = () => 'CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 in ' + daysLeft() + '. CYB follows once proving and encryption are stable — claims first, transfers later.';
+      const LAUNCH_CAP = () => 'Not launched. First the chains: bostrom and space pussy are reborn in ' + daysLeft() + '. Then CYB, claims first.';
       document.querySelectorAll('[data-days]').forEach((e) => { e.textContent = daysLeft(); });
-      const painters = {};
+      DECKS.launch[0].caption = LAUNCH_CAP();
+      painters.launch = (i) => { document.querySelectorAll('.lpane').forEach((el) => { el.hidden = +el.getAttribute('data-s') !== i; }); };
       let step = -1;
       let sub = 0;
       let lock = 0;
@@ -1467,11 +1459,11 @@
         document.querySelectorAll('[data-get]').forEach((a) => {
           a.addEventListener('mouseenter', () => {
             const k = a.getAttribute('data-get');
-            if (cap && links[k]) cap.textContent = links[k];
+            if (cap && links[k] && sub === 0) cap.textContent = links[k];
           });
         });
         const root = document.querySelector('.get');
-        if (root) root.addEventListener('mouseleave', () => { if (cap) cap.textContent = def; });
+        if (root) root.addEventListener('mouseleave', () => { if (cap && sub === 0) cap.textContent = def; });
       })();
 
 
