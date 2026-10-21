@@ -99,13 +99,8 @@
       color: #fff;
       line-height: 1.1;
     }
-    .capfront { display: grid; justify-items: center; gap: .35rem; text-align: center; width: min(44rem, 100%); }
-    .capfront .ticker { font-size: clamp(3rem, 9vw, 6.4rem); margin-bottom: .2rem; }
-    .capfront .capnum { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: clamp(2.6rem, 8.4vw, 6.8rem); letter-spacing: -.07em; line-height: .95; color: #fff; }
-    .capfront .capnum em { font-style: normal; font-size: .36em; color: var(--green); margin-left: .18em; letter-spacing: 0; }
-    .capfront kbd { font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mute); }
-    .capfront .gen-line { margin-top: .6rem; font-size: clamp(.95rem, 1.5vw, 1.15rem); line-height: 1.4; color: #c8c8c8; max-width: 38ch; }
-    .capfront .gen-line strong { color: var(--green); font-family: 'JetBrains Mono', monospace; letter-spacing: -.03em; }
+    .supply .gen-line { margin: .5rem auto 0; font-size: clamp(.85rem, 1.3vw, 1rem); line-height: 1.4; color: #c8c8c8; max-width: 44ch; text-align: center; }
+    .supply .gen-line strong { color: var(--hl, var(--accent)); font-family: 'JetBrains Mono', monospace; letter-spacing: -.03em; }
     .caption .belong {
       max-width: none;
       font-size: clamp(1.2rem, 2.4vw, 1.85rem);
@@ -780,12 +775,7 @@
           <div class="stage">
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
-              <div class="capfront">
-                <h1 class="ticker"><span class="ico globe" aria-hidden="true"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gt" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gt)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/></svg></span><span class="name">CYB</span></h1>
-                <b class="capnum" id="cap-front">18,446,744<em>CYB</em></b>
-                <kbd>the cap · never more</kbd>
-                <p class="gen-line"><strong id="gen-front">187,416 CYB</strong> at genesis — 1 % of the cap, to TOCYB holders at ×666. the rest is minted only when the network learns.</p>
-              </div>
+              <h1 class="ticker"><span class="ico globe" aria-hidden="true"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="gt" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#b6ffcc"/><stop offset=".45" stop-color="#00ff41"/><stop offset="1" stop-color="#007a1f"/></radialGradient></defs><circle cx="20" cy="20" r="18" fill="url(#gt)"/><path d="M2 20h36M20 2v36M8 8.5c6 3 18 3 24 0M8 31.5c6-3 18-3 24 0" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/><ellipse cx="20" cy="20" rx="8" ry="18" fill="none" stroke="#003d10" stroke-opacity=".35" stroke-width="1"/></svg></span><span class="name">CYB</span></h1>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
@@ -962,15 +952,16 @@
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
               <div class="supply">
-                <kbd>SUPPLY</kbd>
-                <b id="v-supply">187,416<em>CYB</em></b>
+                <kbd>THE CAP · NEVER MORE</kbd>
+                <b id="v-cap">18,446,744<em>CYB</em></b>
+                <p class="gen-line"><strong id="gen-scarce">187,416 CYB</strong> at genesis — 1 % of the cap, to TOCYB holders at ×666. the rest is minted only when the network learns.</p>
               </div>
               <div class="chart" id="emission"></div>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p class="cap-line">cap <strong id="v-cap-big">18,446,744 CYB</strong> · power-law emission, illustrative — hover the curve</p>
+            <p class="cap-line">power-law emission, illustrative — hover the curve to see what is out by when</p>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -1428,10 +1419,8 @@
         } catch (e) {}
         const native = tocybSupply * X;
         const shown = fmtCyb(native);
-        document.getElementById('v-supply').innerHTML = shown + '<em>CYB</em>';
-        document.getElementById('v-cap-big').textContent = fmtCyb(CAP) + ' CYB';
-        const gf = document.getElementById('gen-front'); if (gf) gf.textContent = shown + ' CYB';
-        const cf = document.getElementById('cap-front'); if (cf) cf.innerHTML = fmtCyb(CAP) + '<em>CYB</em>';
+        document.getElementById('v-cap').innerHTML = fmtCyb(CAP) + '<em>CYB</em>';
+        const gs = document.getElementById('gen-scarce'); if (gs) gs.textContent = shown + ' CYB';
       }
       valuation();
 
