@@ -1519,7 +1519,7 @@
             return '<button type="button" class="cmp-g" data-s="' + gi + '" style="--gc:' + g.tone + '" title="' + g.by + '"><kbd>' + g.label + '</kbd><span class="ins">' +
               g.items.map((it) => '<span class="cmp-i" title="' + it.n + '">' + icon(it.k) + '</span>').join('') +
               '</span><span class="sum">' + money(total) + '</span></button>';
-          }).join('') + '</div><div class="cmp-note">approximate order of value · metals by stock, fiat by M2, coins by market cap</div>';
+          }).join('') + '</div>';
           root.querySelectorAll('.cmp-g').forEach((el) => {
             const i = +el.getAttribute('data-s');
             el.addEventListener('mouseenter', () => { if (document.querySelector('.chapter.active') === el.closest('.chapter')) showSub(i, false); });
