@@ -649,6 +649,60 @@
     .dot:hover { filter: none; opacity: .82; }
     .dot.on:hover { opacity: 1; }
 
+
+    /* smart — the horizontal comparison: five kinds of money, what creates each, what each is worth today */
+    .cmp { width: 100%; max-width: 62rem; display: grid; gap: .5rem; }
+    .cmp-strip {
+      display: flex;
+      gap: .55rem;
+      width: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: .2rem .1rem .6rem;
+      scrollbar-width: none;
+    }
+    .cmp-strip::-webkit-scrollbar { display: none; }
+    .cmp-g {
+      flex: 1 0 11.2rem;
+      scroll-snap-align: center;
+      display: grid;
+      gap: .5rem;
+      align-content: start;
+      padding: .85rem .85rem .9rem;
+      border: 1px solid #1c1c1c;
+      border-radius: 14px;
+      background: #050505;
+      cursor: pointer;
+      opacity: .42;
+      transition: opacity .2s ease, border-color .2s ease, transform .2s ease;
+      text-align: left;
+    }
+    .cmp-g.on, .cmp-g:hover { opacity: 1; border-color: var(--gc); }
+    .cmp-g.on { transform: translateY(-3px); box-shadow: 0 0 0 1px var(--gc), 0 18px 40px -24px var(--gc); }
+    .cmp-g kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .6rem;
+      letter-spacing: .16em;
+      color: var(--gc);
+      display: flex; align-items: center; gap: .45rem;
+    }
+    .cmp-g kbd::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gc); }
+    .cmp-g .by { font-size: .86rem; line-height: 1.25; color: var(--mute); letter-spacing: -.01em; min-height: 2.5em; }
+    .cmp-g .ins { display: flex; flex-wrap: wrap; gap: .4rem; margin: .1rem 0; }
+    .cmp-i {
+      display: grid; grid-template-columns: 1.7rem auto; column-gap: .4rem; align-items: center;
+      font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .06em; color: #d8d8d8;
+    }
+    .cmp-i svg { width: 1.7rem; height: 1.7rem; display: block; }
+    .cmp-i small { display: block; color: var(--mute); font-size: .56rem; letter-spacing: .04em; }
+    .cmp-g .sum { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -.04em; font-size: clamp(1.5rem, 2.3vw, 2.1rem); line-height: 1; color: #fff; }
+    .cmp-g .sum small { display: block; font-weight: 500; font-size: .58rem; letter-spacing: .14em; color: var(--mute); margin-top: .3rem; }
+    .cmp-g.on .sum { color: var(--gc); }
+    .cmp-note { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .08em; color: var(--mute); text-align: center; width: 100%; }
+    @media (max-width: 640px) {
+      .cmp-strip { gap: .45rem; padding-bottom: .4rem; }
+      .cmp-g { flex-basis: 78vw; }
+    }
     @media (max-width: 640px) {
       .ticker { font-size: 4.6rem; }
       .belong { font-size: 1.15rem; }
@@ -721,7 +775,7 @@
         </div>
       </section>
 
-      <section class="chapter tone-g" data-step="1">
+      <section class="chapter tone-g" data-step="1" data-deck="smart">
         <div class="sheet">
           <div class="phrase">
             <button type="button" class="pane-btn pane-u" data-dy="-1" aria-label="Previous quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 15.2 L12 6.4 l8.4 8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
@@ -730,17 +784,13 @@
           <div class="stage">
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
             <div class="pane">
-              <div class="rows">
-                <div class="row"><i class="y"></i><kbd>GOLD</kbd><b>Production</b></div>
-                <div class="row"><i class="b"></i><kbd>USD</kbd><b>Debt</b></div>
-                <div class="row"><i class="r"></i><kbd>BTC</kbd><b>Energy</b></div>
-                <div class="row"><i class="p"></i><kbd>ETH</kbd><b>Capital</b></div>
-                <div class="row on"><i class="g"></i><kbd>CYB</kbd><b>Information</b></div>
-              </div>
+              <div class="cmp" id="cmp"></div>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
+            <p data-cap></p>
+            <div class="subdots" data-dots></div>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -898,7 +948,7 @@
         <div class="sheet">
           <div class="phrase">
             <button type="button" class="pane-btn pane-u" data-dy="-1" aria-label="Previous quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 15.2 L12 6.4 l8.4 8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
-            <h2>Start earning <span class="hl">what you know.</span></h2>
+            <h2>Not launched yet. <span class="hl">First, the chains.</span></h2>
           </div>
           <div class="stage">
             <button type="button" class="pane-btn pane-l" data-dx="-1" aria-label="Previous property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.2 3.6 L6.4 12 l8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
@@ -913,16 +963,18 @@
                   <a class="os" data-os="ios" href="https://github.com/cyberia-to/cyb/releases/download/v0.16.0/cyb-0.16.0.ipa" title="iOS" aria-label="iOS"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="2.2" fill="currentColor"/><circle cx="12" cy="19.3" r=".9" fill="#000"/></svg></a>
                 </div>
                 <div class="rows pack">
-                  <a class="row" href="https://cyberia.to" target="_blank" rel="noopener" data-get="cyberia"><i class="g"></i><kbd>CYBERIA.TO</kbd><b>The cyberstate</b></a>
+                  <a class="row" href="https://bostrom.network" target="_blank" rel="noopener" data-get="bostrom"><i class="g"></i><kbd>BOSTROM.NETWORK</kbd><b>Reborn 11-05 · 13:22</b></a>
+                  <a class="row" href="https://spacepussy.ai" target="_blank" rel="noopener" data-get="pussy"><i class="p"></i><kbd>SPACEPUSSY.AI</kbd><b>Reborn 11-05 · 13:37</b></a>
+                  <a class="row" href="https://cyb.ai" target="_blank" rel="noopener" data-get="robot"><i class="r"></i><kbd>CYB.AI</kbd><b>The robot</b></a>
                   <a class="row" href="https://cyber.page" target="_blank" rel="noopener" data-get="protocol"><i class="b"></i><kbd>CYBER.PAGE</kbd><b>The protocol</b></a>
-                  <a class="row" href="https://soft3.org" target="_blank" rel="noopener" data-get="stack"><i class="y"></i><kbd>SOFT3</kbd><b>The stack</b></a>
+                  <a class="row" href="https://soft3.org" target="_blank" rel="noopener" data-get="stack"><i class="y"></i><kbd>SOFT3.ORG</kbd><b>The stack</b></a>
                 </div>
               </div>
             </div>
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p data-cap>One binary. macOS, Linux, Windows, Android, iOS. Yours, on your machine.</p>
+            <p data-cap>CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 on 2026-11-05. CYB follows once proving and encryption are stable — claims first, transfers later.</p>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
         </div>
@@ -939,7 +991,7 @@
         <button type="button" class="dot y" data-go="5" data-prop="alive" title="Inflation bootstraps. Use replaces it." aria-label="Alive"><span>Alive</span></button>
         <button type="button" class="dot o" data-go="6" data-prop="growing" title="The more the network learns, the better the money." aria-label="Growing"><span>Growing</span></button>
         <button type="button" class="dot bl" data-go="7" data-prop="scarce" title="This is already out. Most is still unearned." aria-label="Scarce"><span>Scarce</span></button>
-        <button type="button" class="dot w getcyb" data-go="8" data-prop="get" title="Start earning what you know." aria-label="get CYB"><span>get CYB</span></button>
+        <button type="button" class="dot w getcyb" data-go="8" data-prop="launch" title="Not launched yet. First, the chains." aria-label="launch"><span>launch</span></button>
       </nav>
     </div>
   </div>
@@ -949,15 +1001,23 @@
       const app = document.getElementById('app');
       const chapters = [...document.querySelectorAll('.chapter')];
       const n = chapters.length;
-      const PROPS = ['best', 'smart', 'safe', 'easy', 'useful', 'alive', 'growing', 'scarce', 'get'];
+      const PROPS = ['best', 'smart', 'safe', 'easy', 'useful', 'alive', 'growing', 'scarce', 'launch'];
       const ALIAS = {
         complete: 0,
         spend: 4, resources: 4, use: 4,
         viable: 5, sustain: 5, sustainable: 5, sustainably: 5, living: 5,
         compound: 6, compounding: 6, looped: 6, ring: 6,
-        fair: 7, finite: 7
+        fair: 7, finite: 7,
+        get: 8, download: 8, robot: 8
       };
       const DECKS = {
+        smart: [
+          { slug: 'production', caption: 'Production money: dug, refined, stored. Its supply is whatever the mines add — about 1.5% a year for gold — and its worth is the labour it took.' },
+          { slug: 'debt', caption: 'Debt money: issued against obligations by a state and its banks. Supply is a policy. The broad money of three states already dwarfs every other kind.' },
+          { slug: 'energy', caption: 'Energy money: minted by burning electricity into hashes. Honest and scarce, but the work itself is thrown away — the hash proves nothing anyone needs.' },
+          { slug: 'capital', caption: 'Capital money: minted by locking capital and validating. Cheap to run, yet the bag decides who mints — wealth makes wealth.' },
+          { slug: 'information', caption: 'Information money: minted when the network learns. The work is the proof, the proof is the answer, and the answer is what people pay for. Not launched yet.' }
+        ],
         safe: [
           { slug: 'private', kbd: 'PRIVATE', punch: 'Unseen', dot: 'y', caption: 'Unseen by default. A zheng proof can show a hop is valid without showing the amount — the witness stays in the proof, not on a public line.' },
           { slug: 'durable', kbd: 'DURABLE', punch: 'Post-quantum', dot: 'i', caption: 'Hash-only proofs, post-quantum signatures. Several independent implementations that cross-check each other. Time does not eat it.' },
@@ -995,6 +1055,7 @@
           { slug: 'population', caption: 'Cheaper chips, plus a residual on every robot you ship. Then fairness starts again, larger.' }
         ]
       };
+      const LAUNCH_CAP = 'CYB is not launched. The chains come first: bostrom and space pussy are reborn on soft3 on 2026-11-05. CYB follows once proving and encryption are stable — claims first, transfers later.';
       const painters = {};
       let step = -1;
       let sub = 0;
@@ -1066,9 +1127,9 @@
         if (!deck) {
           sub = 0;
           app.dataset.currentSub = '0';
-          if (id === 'get' && ch) {
+          if (id === 'launch' && ch) {
             const cap = ch.querySelector('[data-cap]');
-            if (cap) cap.textContent = 'One binary. macOS, Linux, Windows, Android, iOS. Yours, on your machine.';
+            if (cap) cap.textContent = LAUNCH_CAP;
           }
           if (push !== false) syncUrl(push);
           return;
@@ -1079,7 +1140,7 @@
         const item = deck[s];
         const cap = ch.querySelector('[data-cap]');
         const dotsEl = ch.querySelector('[data-dots]');
-        ch.querySelectorAll('.row[data-s]').forEach((row) => {
+        ch.querySelectorAll('.row[data-s], .cmp-g[data-s]').forEach((row) => {
           row.classList.toggle('on', +row.getAttribute('data-s') === s);
         });
         if (painters[id]) painters[id](s);
@@ -1163,7 +1224,7 @@
         showSub(wantSub, push);
       }
 
-      document.querySelectorAll('[data-deck] .row[data-s]').forEach((row) => {
+      document.querySelectorAll('[data-deck] .row[data-s], [data-deck] .cmp-g[data-s]').forEach((row) => {
         row.addEventListener('mouseenter', () => {
           if (row.closest('.chapter') !== chapters[step]) return;
           showSub(+row.getAttribute('data-s'), false);
@@ -1187,7 +1248,7 @@
           return;
         }
         const sb = e.target.closest('[data-s]');
-        if (sb && (sb.closest('.subdots') || sb.closest('.rows'))) {
+        if (sb && (sb.closest('.subdots') || sb.closest('.rows') || sb.closest('.cmp'))) {
           e.preventDefault();
           showSub(+sb.getAttribute('data-s'));
           return;
@@ -1317,11 +1378,13 @@
           ios: { href: 'https://github.com/cyberia-to/cyb/releases/download/v0.16.0/cyb-0.16.0.ipa', cap: 'TrollStore IPA, or a jailbreak. App Store is a later cut.' }
         };
         const links = {
-          cyberia: 'CYB is not just money. It is the money of Cyberia — the cyberstate guided by superintelligence. An interplanetary movement.',
+          bostrom: 'bostrom, the bootloader of superintelligence, returns five years to the second after its block 1 — with $BOOT, every balance and the whole graph. Check your balance there.',
+          pussy: 'space pussy, the sister chain, is reborn fifteen minutes after bostrom, with $PUSSY and its graph. Same keys, same balances.',
+          robot: 'cyb — the robot. One binary that thinks on your silicon, links, proves and mines. Download it today; it reads both chains at rebirth.',
           protocol: 'The protocol: how the graph learns, how a neuron earns, how proofs settle. Read it on cyber.page.',
-          stack: 'soft3 — collective, private, provable computing. The stack built to take civilization to the next level.'
+          stack: 'soft3 — collective, private, provable computing. The stack both chains are reborn on.'
         };
-        const def = 'One binary. macOS, Linux, Windows, Android, iOS. Yours, on your machine.';
+        const def = LAUNCH_CAP;
         const ua = navigator.userAgent || '';
         const plat = navigator.platform || '';
         let os = 'mac';
@@ -1348,6 +1411,79 @@
         });
         const root = document.querySelector('.get');
         if (root) root.addEventListener('mouseleave', () => { if (cap) cap.textContent = def; });
+      })();
+
+
+      (function compare() {
+        const root = document.getElementById('cmp');
+        if (!root) return;
+        // what each kind of money is worth today. metals: above-ground stock × spot;
+        // fiat: broad money (M2); coins: market cap. live where a free endpoint exists,
+        // the recorded figure otherwise. all USD.
+        const AS_OF = '2026-10-21';
+        const OZ_PER_T = 32150.75;
+        const ICON = {
+          gold: ['Au', '#ffc501'], silver: ['Ag', '#c9ced4'], btc: ['₿', '#f7931a'], xmr: ['ɱ', '#ff6600'], zec: ['ⓩ', '#f4b728'],
+          eth: ['Ξ', '#8b9cff'], sol: ['◎', '#14f195'], usd: ['$', '#00b4ff'], cny: ['¥', '#ff4d4d'], eur: ['€', '#4d7cff'], cyb: ['', '#00ff01']
+        };
+        const flag = '<svg viewBox="15.5 15 69 68" aria-hidden="true"><circle cx="50" cy="26.25" r="10" fill="#00ff01"/><circle cx="68.57" cy="35.19" r="10" fill="#00b4ff"/><circle cx="73.15" cy="55.28" r="10" fill="#1700fe"/><circle cx="60.30" cy="71.40" r="10" fill="#6b00fe"/><circle cx="39.70" cy="71.40" r="10" fill="#fe0000"/><circle cx="26.85" cy="55.28" r="10" fill="#ff6501"/><circle cx="31.43" cy="35.19" r="10" fill="#ffc501"/></svg>';
+        const icon = (k) => {
+          if (k === 'cyb') return flag;
+          const [g, c] = ICON[k];
+          const fs = g.length > 1 ? 17 : 22;
+          return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="' + c + '" fill-opacity=".14" stroke="' + c + '" stroke-width="1.6"/><text x="20" y="21" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-weight="700" font-size="' + fs + '" fill="' + c + '">' + g + '</text></svg>';
+        };
+        const G = [
+          { slug: 'production', label: 'PRODUCTION', tone: '#ffc501', by: 'made by work on matter — dug, refined, stored',
+            items: [{ k: 'gold', n: 'GOLD', note: '216,265 t × spot', usd: 216265 * OZ_PER_T * 4139.5 }, { k: 'silver', n: 'SILVER', note: '1.74M t × spot', usd: 1740000 * OZ_PER_T * 57.95 }], unit: 'above-ground stock' },
+          { slug: 'debt', label: 'DEBT', tone: '#00b4ff', by: 'issued against obligations by a state and its banks',
+            items: [{ k: 'usd', n: 'USD', note: 'M2', usd: 22.3e12 }, { k: 'cny', n: 'CNY', note: 'M2', usd: 46.5e12 }, { k: 'eur', n: 'EUR', note: 'M2', usd: 19.5e12 }], unit: 'broad money · 2026 estimate' },
+          { slug: 'energy', label: 'ENERGY', tone: '#fe0000', by: 'minted by burning electricity into hashes',
+            items: [{ k: 'btc', n: 'BTC', id: 'bitcoin', usd: 1.682e12 }, { k: 'xmr', n: 'XMR', id: 'monero', usd: 11.2e9 }, { k: 'zec', n: 'ZEC', id: 'zcash', usd: 22.4e9 }], unit: 'market cap' },
+          { slug: 'capital', label: 'CAPITAL', tone: '#6b00fe', by: 'minted by locking capital and validating',
+            items: [{ k: 'eth', n: 'ETH', id: 'ethereum', usd: 303.3e9 }, { k: 'sol', n: 'SOL', id: 'solana', usd: 63.3e9 }], unit: 'market cap' },
+          { slug: 'information', label: 'INFORMATION', tone: '#00ff01', by: 'minted when the network learns',
+            items: [{ k: 'cyb', n: 'CYB', note: 'genesis 187,416 CYB', usd: null }], unit: 'not launched' }
+        ];
+        const money = (v) => {
+          if (v === null) return '—';
+          const t = v / 1e12;
+          if (t >= 1) return '$' + (t >= 10 ? t.toFixed(0) : t.toFixed(1)) + 'T';
+          const b = v / 1e9;
+          return '$' + (b >= 10 ? b.toFixed(0) : b.toFixed(1)) + 'B';
+        };
+        const live = {};
+        function render() {
+          root.innerHTML = '<div class="cmp-strip">' + G.map((g, gi) => {
+            const total = g.items.every((it) => it.usd === null) ? null : g.items.reduce((a, it) => a + (it.usd || 0), 0);
+            return '<button type="button" class="cmp-g" data-s="' + gi + '" style="--gc:' + g.tone + '"><kbd>' + g.label + '</kbd><span class="by">' + g.by + '</span><span class="ins">' +
+              g.items.map((it) => '<span class="cmp-i" title="' + (it.note || it.n) + '">' + icon(it.k) + '<span>' + it.n + '<small>' + (it.usd === null ? 'not yet' : money(it.usd) + (live[it.id] ? ' · live' : '')) + '</small></span></span>').join('') +
+              '</span><span class="sum">' + money(total) + '<small>' + g.unit + '</small></span></button>';
+          }).join('') + '</div><div class="cmp-note">USD · metals: above-ground stock × spot · fiat: M2 · coins: market cap · ' + AS_OF + (Object.keys(live).length ? ' · coins live via coingecko' : '') + '</div>';
+          root.querySelectorAll('.cmp-g').forEach((el) => {
+            const i = +el.getAttribute('data-s');
+            el.addEventListener('mouseenter', () => { if (document.querySelector('.chapter.active') === el.closest('.chapter')) showSub(i, false); });
+            el.addEventListener('click', () => showSub(i, true));
+          });
+          if (step === 1) showSub(sub, false);
+        }
+        painters.smart = (i) => {
+          root.querySelectorAll('.cmp-g').forEach((el, k) => el.classList.toggle('on', k === i));
+          const el = root.querySelectorAll('.cmp-g')[i];
+          const strip = root.querySelector('.cmp-strip');
+          if (el && strip && strip.scrollWidth > strip.clientWidth + 4) el.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        };
+        render();
+        // live market caps — fetched after first paint, never on the critical path
+        const ids = G.flatMap((g) => g.items.filter((it) => it.id).map((it) => it.id));
+        const refresh = () => fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + ids.join(',') + '&vs_currencies=usd&include_market_cap=true')
+          .then((r) => r.json())
+          .then((d) => {
+            let n = 0;
+            G.forEach((g) => g.items.forEach((it) => { const v = it.id && d[it.id] && d[it.id].usd_market_cap; if (v > 0) { it.usd = v; live[it.id] = true; n++; } }));
+            if (n) render();
+          }).catch(() => {});
+        if ('requestIdleCallback' in window) requestIdleCallback(refresh, { timeout: 4000 }); else setTimeout(refresh, 1500);
       })();
 
       (function emissionChart() {
