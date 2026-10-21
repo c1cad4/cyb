@@ -1076,8 +1076,8 @@
       };
       const DECKS = {
         smart: [
+          { slug: 'force', caption: 'Force money: issued as debt by a state and its banks, backed by the land it holds and the army that holds it. The obligation is worth what the territory can be taxed for. The broad money of three states dwarfs every other kind.' },
           { slug: 'production', caption: 'Production money: dug, refined, stored. Its supply is whatever the mines add — about 1.5% a year for gold — and its worth is the labour it took.' },
-          { slug: 'debt', caption: 'Debt money: issued against obligations by a state and its banks. Supply is a policy. The broad money of three states already dwarfs every other kind.' },
           { slug: 'energy', caption: 'Energy money: minted by burning electricity into hashes. Honest and scarce, but the work itself is thrown away — the hash proves nothing anyone needs.' },
           { slug: 'capital', caption: 'Capital money: minted by locking capital and validating. Cheap to run, yet the bag decides who mints — wealth makes wealth.' },
           { slug: 'information', caption: 'Information money: minted when the network learns. The work is the proof, the proof is the answer, and the answer is what people pay for. Not launched yet.' }
@@ -1172,7 +1172,7 @@
           s = hit.s;
         }
         if (parts[1] && DECKS[PROPS[i]]) {
-          const idx = DECKS[PROPS[i]].findIndex((x) => x.slug === parts[1].toLowerCase());
+          const idx = DECKS[PROPS[i]].findIndex((x) => x.slug === (parts[1].toLowerCase() === 'debt' ? 'force' : parts[1].toLowerCase()));
           if (idx >= 0) s = idx;
         }
         return { i: i, s: s };
@@ -1501,10 +1501,10 @@
           return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="' + c + '" fill-opacity=".14" stroke="' + c + '" stroke-width="1.6"/><text x="20" y="21" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono,monospace" font-weight="700" font-size="' + fs + '" fill="' + c + '">' + g + '</text></svg>';
         };
         const G = [
+          { slug: 'force', label: 'FORCE', tone: '#00b4ff', by: 'issued as debt, backed by the land a state holds and the army that holds it',
+            items: [{ k: 'usd', n: 'USD', note: 'M2', usd: 22.3e12 }, { k: 'cny', n: 'CNY', note: 'M2', usd: 46.5e12 }, { k: 'eur', n: 'EUR', note: 'M2', usd: 19.5e12 }], unit: 'broad money · 2026 estimate' },
           { slug: 'production', label: 'PRODUCTION', tone: '#ffc501', by: 'made by work on matter — dug, refined, stored',
             items: [{ k: 'gold', n: 'GOLD', note: '216,265 t × spot', usd: 216265 * OZ_PER_T * 4139.5 }, { k: 'silver', n: 'SILVER', note: '1.74M t × spot', usd: 1740000 * OZ_PER_T * 57.95 }], unit: 'above-ground stock' },
-          { slug: 'debt', label: 'DEBT', tone: '#00b4ff', by: 'issued against obligations by a state and its banks',
-            items: [{ k: 'usd', n: 'USD', note: 'M2', usd: 22.3e12 }, { k: 'cny', n: 'CNY', note: 'M2', usd: 46.5e12 }, { k: 'eur', n: 'EUR', note: 'M2', usd: 19.5e12 }], unit: 'broad money · 2026 estimate' },
           { slug: 'energy', label: 'ENERGY', tone: '#fe0000', by: 'minted by burning electricity into hashes',
             items: [{ k: 'btc', n: 'BTC', id: 'bitcoin', usd: 1.682e12 }, { k: 'xmr', n: 'XMR', id: 'monero', usd: 11.2e9 }, { k: 'zec', n: 'ZEC', id: 'zcash', usd: 22.4e9 }], unit: 'market cap' },
           { slug: 'capital', label: 'CAPITAL', tone: '#6b00fe', by: 'minted by locking capital and validating',
