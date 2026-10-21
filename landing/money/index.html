@@ -687,8 +687,8 @@
       display: flex; align-items: center; gap: .45rem;
     }
     .cmp-g kbd::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gc); }
-    .cmp-g .ins { display: flex; gap: .45rem; margin: .35rem 0 .2rem; }
-    .cmp-i { display: block; width: 2.2rem; height: 2.2rem; }
+    .cmp-g .ins { display: flex; flex-wrap: wrap; gap: .4rem; margin: .35rem 0 .2rem; }
+    .cmp-i { display: block; width: 2rem; height: 2rem; }
     .cmp-i svg { width: 100%; height: 100%; display: block; }
     .cmp-g .sum { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -.05em; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1; color: #fff; margin-top: .2rem; }
     .cmp-g .sum i { font-style: normal; font-size: .5em; color: var(--mute); margin-left: .15em; letter-spacing: 0; }
@@ -1419,7 +1419,7 @@
         const OZ_PER_T = 32150.75;
         const ICON = {
           gold: ['Au', '#ffc501'], silver: ['Ag', '#c9ced4'], btc: ['₿', '#f7931a'], xmr: ['ɱ', '#ff6600'], zec: ['ⓩ', '#f4b728'],
-          eth: ['Ξ', '#8b9cff'], sol: ['◎', '#14f195'], usd: ['$', '#00b4ff'], cny: ['¥', '#ff4d4d'], eur: ['€', '#4d7cff'], cyb: ['', '#00ff01']
+          eth: ['Ξ', '#8b9cff'], sol: ['◎', '#14f195'], xrp: ['✕', '#9aa4b2'], bnb: ['B', '#f3ba2f'], trx: ['T', '#ff4b4b'], usd: ['$', '#00b4ff'], cny: ['¥', '#ff4d4d'], eur: ['€', '#4d7cff'], cyb: ['', '#00ff01']
         };
         const flag = '<svg viewBox="15.5 15 69 68" aria-hidden="true"><circle cx="50" cy="26.25" r="10" fill="#00ff01"/><circle cx="68.57" cy="35.19" r="10" fill="#00b4ff"/><circle cx="73.15" cy="55.28" r="10" fill="#1700fe"/><circle cx="60.30" cy="71.40" r="10" fill="#6b00fe"/><circle cx="39.70" cy="71.40" r="10" fill="#fe0000"/><circle cx="26.85" cy="55.28" r="10" fill="#ff6501"/><circle cx="31.43" cy="35.19" r="10" fill="#ffc501"/></svg>';
         const icon = (k) => {
@@ -1436,7 +1436,7 @@
           { slug: 'energy', label: 'ENERGY', tone: '#fe0000', by: 'minted by burning electricity into hashes',
             items: [{ k: 'btc', n: 'BTC', id: 'bitcoin', usd: 1.682e12 }, { k: 'xmr', n: 'XMR', id: 'monero', usd: 11.2e9 }, { k: 'zec', n: 'ZEC', id: 'zcash', usd: 22.4e9 }], unit: 'market cap' },
           { slug: 'capital', label: 'CAPITAL', tone: '#6b00fe', by: 'minted by locking capital and validating',
-            items: [{ k: 'eth', n: 'ETH', id: 'ethereum', usd: 303.3e9 }, { k: 'sol', n: 'SOL', id: 'solana', usd: 63.3e9 }], unit: 'market cap' },
+            items: [{ k: 'eth', n: 'ETH', id: 'ethereum', usd: 301e9 }, { k: 'bnb', n: 'BNB', id: 'binancecoin', usd: 98e9 }, { k: 'xrp', n: 'XRP', id: 'ripple', usd: 86e9 }, { k: 'sol', n: 'SOL', id: 'solana', usd: 63e9 }, { k: 'trx', n: 'TRX', id: 'tron', usd: 31e9 }], unit: 'market cap' },
           { slug: 'information', label: 'INFORMATION', tone: '#00ff01', by: 'minted when the network learns',
             items: [{ k: 'cyb', n: 'CYB', note: 'genesis 187,416 CYB', usd: null }], unit: 'not launched' }
         ];
