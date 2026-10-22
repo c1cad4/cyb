@@ -997,8 +997,8 @@
                   <a class="os" data-os="ios" href="https://github.com/cyberia-to/cyb/releases/download/v0.16.0/cyb-0.16.0.ipa" title="iOS" aria-label="iOS"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="2.2" fill="currentColor"/><circle cx="12" cy="19.3" r=".9" fill="#000"/></svg></a>
                 </div>
                 <div class="rows pack">
-                  <a class="row" href="https://bostrom.network" target="_blank" rel="noopener" data-get="bostrom"><i class="g"></i><kbd>BOSTROM.NETWORK</kbd><b>Reborn in <span data-days>—</span></b></a>
-                  <a class="row" href="https://spacepussy.ai" target="_blank" rel="noopener" data-get="pussy"><i class="p"></i><kbd>SPACEPUSSY.AI</kbd><b>Reborn 15 min later</b></a>
+                  <a class="row" href="https://bostrom.network" target="_blank" rel="noopener" data-get="bostrom"><i class="g"></i><kbd>BOSTROM.NETWORK</kbd><b>Reborn <span data-days>when the code is ready</span></b></a>
+                  <a class="row" href="https://spacepussy.ai" target="_blank" rel="noopener" data-get="pussy"><i class="p"></i><kbd>SPACEPUSSY.AI</kbd><b>Reborn first — the canary</b></a>
                   <a class="row" href="https://cyb.ai" target="_blank" rel="noopener" data-get="robot"><i class="r"></i><kbd>CYB.AI</kbd><b>The robot</b></a>
                   <a class="row" href="https://cyber.page" target="_blank" rel="noopener" data-get="protocol"><i class="b"></i><kbd>CYBER.PAGE</kbd><b>The protocol</b></a>
                   <a class="row" href="https://soft3.org" target="_blank" rel="noopener" data-get="stack"><i class="y"></i><kbd>SOFT3.ORG</kbd><b>The stack</b></a>
@@ -1022,7 +1022,7 @@
             <button type="button" class="pane-btn pane-r" data-dx="1" aria-label="Next property"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.8 3.6 L17.6 12 l-8.8 8.4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
           <div class="caption">
-            <p data-cap>Not launched. First the chains: bostrom and space pussy are reborn in <span data-days>—</span>. Then CYB, claims first.</p>
+            <p data-cap>Not launched. First the chains: bostrom and space pussy are reborn when the code is ready. Then CYB, claims first.</p>
             <div class="subdots" data-dots></div>
             <button type="button" class="pane-btn pane-d" data-dy="1" aria-label="Next quality"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 8.8 L12 17.6 l8.4 -8.8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter"/></svg></button>
           </div>
@@ -1109,10 +1109,9 @@
         ]
       };
       const painters = {};
-      const REBIRTH = Date.parse('2026-11-05T13:22:42Z'); // bostrom block 1 + five years to the second
-      const daysLeft = () => { const d = (REBIRTH - Date.now()) / 864e5; if (d <= 0) return 'now — the chains are live'; const n = Math.ceil(d); return n === 1 ? 'one day' : n + ' days'; };
-      const LAUNCH_CAP = () => 'Not launched. First the chains: bostrom and space pussy are reborn in ' + daysLeft() + '. Then CYB, claims first.';
-      document.querySelectorAll('[data-days]').forEach((e) => { e.textContent = daysLeft(); });
+      // no date: the chains launch when the code passes its gates (the owner's call, the launch page tracks the gates)
+      const LAUNCH_CAP = () => 'Not launched. First the chains: bostrom and space pussy are reborn when the code is ready. Then CYB, claims first.';
+      document.querySelectorAll('[data-days]').forEach((e) => { e.textContent = 'when the code is ready'; });
       DECKS.launch[0].caption = LAUNCH_CAP();
       painters.launch = (i) => { document.querySelectorAll('.lpane').forEach((el) => { el.hidden = +el.getAttribute('data-s') !== i; }); };
       let step = -1;
