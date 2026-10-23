@@ -262,8 +262,8 @@ provability replaces enforcement. the laws are not rules a validator checks — 
 
 - [[soma]] — the runtime that animates a single Robot on one Body
 - [[cyberia/protocol]] — the sovereign + market layer that any state Robot adds on top
-- [[cyberia/foundation/org]] — the seven lenses applied to specific cyberian Robots
-- [[cyberia/foundation/governance]] — the 147 agents that govern the cyberia state Robot
+- [[cyberia/org]] — the seven lenses applied to specific cyberian Robots
+- [[cyberia/governance]] — the 147 agents that govern the cyberia state Robot
 - [[cyber]] — the underlying [[cybergraph]] substrate
 
 ---
