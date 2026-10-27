@@ -88,6 +88,28 @@ fn spell_path_in(dir: &std::path::Path) -> std::path::PathBuf {
     if legacy.try_exists().unwrap_or(true) { legacy } else { dir.join("spell") }
 }
 
+/// Exclusively create an identity: never overwrite an existing spell.
+fn persist_new_spell(path: &std::path::Path, spell: &str) -> std::io::Result<()> {
+    use std::io::Write;
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    let mut opts = std::fs::OpenOptions::new();
+    opts.write(true).create_new(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::OpenOptionsExt;
+        opts.mode(0o600);
+    }
+    let mut file = opts.open(path)?;
+    if let Err(e) = file.write_all(spell.as_bytes()).and_then(|_| file.sync_all()) {
+        drop(file);
+        let _ = std::fs::remove_file(path);
+        return Err(e);
+    }
+    Ok(())
+}
+
 /// Load the identity, minting one on first boot.
 ///
 /// Failure never takes the app down: a body that cannot write its spell
@@ -98,25 +120,31 @@ pub fn load_or_mint() -> Identity {
 
     let spell = match std::fs::read_to_string(&path) {
         Ok(m) if !m.trim().is_empty() => m.trim().to_string(),
-        _ => {
-            let minted = mudra::spell::generate()
-                .unwrap_or_else(|_| String::new());
-            if !minted.is_empty() {
-                if let Some(dir) = path.parent() {
-                    let _ = std::fs::create_dir_all(dir);
+        Ok(_) => {
+            warn!("identity: existing spell is empty; refusing to replace it");
+            String::new()
+        }
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+            match mudra::spell::generate() {
+                Ok(minted) => match persist_new_spell(&path, &minted) {
+                    Ok(()) => {
+                        info!("identity: minted a new spell at {}", path.display());
+                        minted
+                    }
+                    Err(e) => {
+                        warn!("identity: spell not persisted at {}: {e}; using ephemeral identity", path.display());
+                        String::new()
+                    }
+                },
+                Err(e) => {
+                    warn!("identity: spell generation failed: {e}");
+                    String::new()
                 }
-                let _ = std::fs::write(&path, &minted);
-                #[cfg(unix)]
-                {
-                    use std::os::unix::fs::PermissionsExt;
-                    let _ = std::fs::set_permissions(
-                        &path,
-                        std::fs::Permissions::from_mode(0o600),
-                    );
-                }
-                info!("identity: minted a new spell at {}", path.display());
             }
-            minted
+        }
+        Err(e) => {
+            warn!("identity: cannot read existing spell at {}: {e}; refusing to replace it", path.display());
+            String::new()
         }
     };
 
@@ -167,6 +195,25 @@ fn identity_from_spell(spell: &str) -> Option<Identity> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn spell_create_is_exclusive_and_preserves_existing_identity() {
+        let dir = std::env::temp_dir().join(format!(
+            "cyb-identity-exclusive-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()
+        ));
+        let path = dir.join("spell");
+        persist_new_spell(&path, "first synthetic phrase").unwrap();
+        assert!(persist_new_spell(&path, "second synthetic phrase").is_err());
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), "first synthetic phrase");
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            assert_eq!(std::fs::metadata(&path).unwrap().permissions().mode() & 0o777, 0o600);
+        }
+        std::fs::remove_dir_all(dir).unwrap();
+    }
 
     #[test]
     fn spell_filename_keeps_existing_identity_before_minting() {
