@@ -1,73 +1,98 @@
-# AGENTS.md — rules for every coding agent in this repository
+# AGENTS.md — cyb
 
-This file is read by Codex, Kimi Code, Grok Build, Cursor and any tool that
-honours AGENTS.md. Claude reads CLAUDE.md in the same directory; both say the
-same thing, and the doctrine behind both is `~/cyber/cyberia/dev.md`
-(published as the [[cyberia/dev]] page). Read that page first when in doubt.
+> the doctrine of the home is `~/cyber/AGENTS.md`; it applies here first. Claude Code receives both files at session start through `~/.config/cyber/agents-md.nu`; other agents read them in order.
 
-## release train (cyb, cyber, soft3)
+## Архитектура
 
-- Truth is origin. A release candidate is built only from committed, pushed
-  inputs on the default branch of every repository it closes over. A working
-  tree is never an input; a dirty or unpushed input makes a candidate local,
-  and a local candidate can never become a release.
-- One candidate every friday 12:00 UTC, cut by an agent from origin:
-  `candidate-YYYYMMDD.N`, a draft pre-release on GitHub with binaries per
-  platform (macOS arm64/x64, Linux arm64/x64; cyb adds the Android apk; no
-  Windows, no iOS), `SHA256SUMS`, `sources.json`, `candidate.json`,
-  `release-validation.json`.
-- Gates are executable and named in each repository's CLAUDE.md / AGENTS.md.
-  A red gate ships as a red candidate with its evidence; never hide it, never
-  fix the artifact by hand.
-- Versions are semver. One bump is one pull request `chore: <component>
-  <version>` touching `Cargo.toml`, `CHANGELOG.md` and the sibling pins in the
-  other two repositories, nothing else. Tags are `v<version>` on the default
-  branch. `soft3/release/phase1.toml` pins the sibling revisions; drift from a
-  pin is a red gate and is fixed by a bump PR, never by editing a path.
-- Freeze from the cut until the verdict: nothing merges into the three default
-  branches; candidate fixes go to `release/<date>` as `fix:` commits.
-- Roles: agents cut candidates, run gates, write receipts to
-  `audit/release-<date>/` and open bump PRs. Only the owner merges a bump,
-  promotes a candidate to a release, publishes to crates.io, pushes a tag or
-  runs `make ship`. An agent never does any of those.
+Bevy — корневой runtime. Один бинарник для всех платформ.
 
-## git
+```
+/                    Rust workspace (Cargo.toml, Makefile)
+├── shell/           Bevy desktop runtime — package/bin `cyb`, all worlds
+├── apps/            Leptos WASM web apps — loaded via WebView in Portal world
+├── reference/       Спецификация, roadmap
+├── graph/           Knowledge graph pages
+├── docs/            Документация
+```
 
-- Commit after every logical unit of work, one change per commit, conventional
-  prefixes (`feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`), message
-  says why.
-- Stage by explicit paths. Never `git add -A`. Never amend, rebase, reset,
-  stash, checkout files or force-push on shared branches; never rewrite
-  history. No AI co-authorship trailers.
-- Zero warnings and green tests before a commit; if red, prefix `wip:` and
-  quote the first error in the message.
-- Other people's working trees under `~/cyber/<repo>` may be dirty with
-  their own work: never edit, stage or discard it; work in a worktree.
+Внешние зависимости:
+- `~/cyber/nu/` — форк nushell (nu-protocol, nu-engine, sugarloaf и др.)
+- `~/cyber/evy/forks/naga/` — форк naga (shader compiler)
 
-## moving a page out of cyber
+## One Binary Rule
 
-Nothing is thrown away by default. Settled and implemented → the owner's spec
-or an existing explainer, with measured numbers. A projection with a named
-assumption and an open question → the owner's `roadmap/`, one file per
-question, with the registry's status words. A cross-component argument →
-`soft3/docs/` as an explainer with each projection marked measured, refuted
-or open. Delete only duplicates and refuted-and-rewritten claims. Remove the
-ledger row of a deleted page; keep old wiki-links resolving via `alias:`.
+**WebView is only for web content (Portal world).** All other rendering — terminal, graph, 3D, UI — is pure Rust via Bevy + wgpu. No JS bundles, no external runtimes embedded in the binary.
 
-## reports
+**Android = desktop.** The Android build is the same app, same Bevy, same worlds, same terminal, same nushell. The only Android-specific addition is `nu_plugin_android` which exposes hardware APIs (GPS, camera, sensors, etc.) that desktop doesn't have. There is no separate Android UI or Android terminal — it's one codebase.
 
-Audits, benchmarks and release validation go to `<repo>/audit/`; contracts
-to `specs/`; observed results never in a spec. Every number in a report
-names the command and the revision it came from.
+## Worlds
 
-## vocabulary
+| World     | Hotkey | Description                        |
+|-----------|--------|------------------------------------|
+| Splash    | —      | Boot screen                        |
+| Spells    | Cmd+1  | AI agent / spell runner            |
+| Graph     | Cmd+2  | Knowledge graph (mir engine)       |
+| Sense     | Cmd+3  | Sensor / perception view           |
+| Terminal  | Cmd+4  | Nushell terminal (sugarloaf)       |
+| Portal    | Cmd+5  | Leptos WASM web UI via WebView     |
+| Interface | Cmd+6  | Native Bevy UI                     |
 
-Root terms of the cybergraph: file (the thing), particle (its 32-byte hemera
-identity), cyberlink, neuron, token, focus. Never CID, user, edge. Cyber
-graph pages: no bold, no definitions by negation, wiki-links for concepts.
+## Сборка
 
-## platform
+```bash
+# Bevy shell (desktop):
+make build                         # debug build
+make run                           # release run
+make dmg                           # macOS release + DMG
 
-macOS dev machine: BSD `sed` has no `\b` (use `[[:<:]]w[[:>:]]`); zsh does
-not word-split unquoted `$var`; `~/.cargo/bin` and `/opt/homebrew/bin` are
-on PATH; sibling repositories resolve by relative path from `~/cyber`.
+# Leptos apps:
+make apps                          # trunk build --release
+
+# Android:
+make android                       # full: rust + assets + apk
+
+# Dev:
+make dev                           # cargo run -p cyb
+```
+
+## Проверка после изменений
+
+- **Fleet (обязателен перед коммитом)**: `make fleet` — мульти-окружение:
+  N изолированных тел (свои HOME) + детерминированный mockchain
+  (`harness/mockchain.py`), ассерты на boot/identity/graph/networks/
+  beacon/prover/vault/orphans. Хук pre-commit гоняет его сам;
+  `SKIP_FLEET=1` для docs-only коммитов. `FLEET_SKIP_BUILD=1` если
+  бинарь свежий.
+- **Shell**: `cargo check -p cyb`
+- **Apps**: `cd apps && trunk build --release`
+- **Release**: `make dmg`
+- **Android**: `make android`
+
+## Релизы
+
+Релизный поезд (правила: `~/cyber/cyberia/dev.md` § release train):
+
+- кандидат режется каждую пятницу 12:00 UTC агентом только из
+  `origin/master`; рабочее дерево никогда не вход. `candidate-YYYYMMDD.N`,
+  черновой pre-release: dmg (arm64, x64), apk, `SHA256SUMS`,
+  `sources.json`, `candidate.json`, `release-validation.json`.
+- гейты кандидата: `cargo check --tests --locked`, `cargo test`,
+  `make fleet` GREEN, `make dmg`, `make android-apk`. Красный гейт
+  публикуется красным с уликами, руками артефакт не чинится.
+- бамп версии — один PR `chore: cyb <version>` (Cargo.toml, CHANGELOG,
+  пины сиблингов в cyber и soft3), ничего больше.
+- **`make ship`** — рука владельца: бамп, коммит через fleet-ворота, тег,
+  dmg чистого дерева, notes из git log, push master+tags. Агент `ship`
+  не запускает, тег не пушит, кандидат в релиз не продвигает.
+- квитанции в `audit/release-<date>/`; одна строка в work log
+  `cyber/launch.md` на кандидат.
+
+## Git
+
+- **Push только по запросу** (исключение: `make ship` пушит по определению)
+- **Атомарные коммиты**
+
+## Планы и решения
+
+`.claude/plans/` — утверждённые планы.
+`reference/roadmap.md` — общий roadmap.
