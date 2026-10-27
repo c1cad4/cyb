@@ -87,16 +87,38 @@ pub fn save(key: &[u8; 32], entries: &[Entry]) -> Result<(), String> {
     blob.extend_from_slice(MAGIC);
     blob.extend_from_slice(&nonce);
     blob.extend_from_slice(&ct);
-    // Write-then-rename so a crash mid-save cannot eat the old vault.
-    let tmp = path.with_extension("enc.tmp");
-    std::fs::write(&tmp, &blob).map_err(|e| e.to_string())?;
-    std::fs::rename(&tmp, &path).map_err(|e| e.to_string())?;
+    save_blob(&path, &blob)?;
+
+    Ok(())
+}
+
+/// Write a complete ciphertext into a newly created private temporary file
+/// before replacing the destination. This avoids partially written vaults.
+fn save_blob(path: &std::path::Path, blob: &[u8]) -> Result<(), String> {
+    use std::io::Write;
+    let mut random = [0u8; 16];
+    getrandom::getrandom(&mut random).map_err(|e| format!("vault: temp entropy: {e}"))?;
+    let suffix: String = random.iter().map(|b| format!("{b:02x}")).collect();
+    let tmp = path.with_extension(format!("enc.{suffix}.tmp"));
+    let mut opts = std::fs::OpenOptions::new();
+    opts.write(true).create_new(true);
     #[cfg(unix)]
     {
-        use std::os::unix::fs::PermissionsExt;
-        let _ = std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o600));
+        use std::os::unix::fs::OpenOptionsExt;
+        opts.mode(0o600);
     }
-    Ok(())
+    let mut file = opts.open(&tmp).map_err(|e| e.to_string())?;
+    let result = (|| -> std::io::Result<()> {
+        file.write_all(blob)?;
+        file.sync_all()?;
+        drop(file);
+        std::fs::rename(&tmp, path)?;
+        Ok(())
+    })();
+    if result.is_err() {
+        let _ = std::fs::remove_file(&tmp);
+    }
+    result.map_err(|e| e.to_string())
 }
 
 fn serialize(entries: &[Entry]) -> String {
@@ -166,6 +188,43 @@ pub fn totp(secret_b32: &str, unix: u64) -> Option<(String, u64)> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn vault_blob_save_is_private_and_replaces_entire_file() {
+        let dir = std::env::temp_dir().join(format!(
+            "cyb-vault-storage-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()
+        ));
+        std::fs::create_dir(&dir).unwrap();
+        let path = dir.join("vault.enc");
+        std::fs::write(&path, b"old ciphertext").unwrap();
+        save_blob(&path, b"new ciphertext").unwrap();
+        assert_eq!(std::fs::read(&path).unwrap(), b"new ciphertext");
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            assert_eq!(std::fs::metadata(&path).unwrap().permissions().mode() & 0o777, 0o600);
+        }
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 1);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[test]
+    fn failed_vault_blob_save_keeps_original() {
+        let dir = std::env::temp_dir().join(format!(
+            "cyb-vault-failure-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()
+        ));
+        std::fs::create_dir(&dir).unwrap();
+        let path = dir.join("vault.enc");
+        std::fs::write(&path, b"old ciphertext").unwrap();
+        let invalid = dir.join("missing").join("vault.enc");
+        assert!(save_blob(&invalid, b"new ciphertext").is_err());
+        assert_eq!(std::fs::read(&path).unwrap(), b"old ciphertext");
+        std::fs::remove_dir_all(dir).unwrap();
+    }
 
     #[test]
     fn legacy_root_kind_loads_as_spell_without_changing_the_value() {
